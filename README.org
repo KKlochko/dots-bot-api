@@ -1,0 +1,9 @@
+* dots-bot-api
+dots-bot-api is the application that will help to manage logic as the
+bot backend.
+
+It uses [[https://docs.dots.live/][Dots Platform Clients API]].
+
+* Author
+Kostiantyn Klochko (c) 2023
+
