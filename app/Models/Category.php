@@ -4,21 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Company extends Model
+class Category extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'uuid',
         'name',
-        'image',
-        'description',
+        'url',
     ];
 
-    public function categories(): HasMany
+    public function company(): BelongsTo
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsTo(Company::class);
     }
 }
