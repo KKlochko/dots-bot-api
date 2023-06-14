@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Category extends Model
+class Item extends Model
 {
     use HasFactory;
 
@@ -15,15 +14,13 @@ class Category extends Model
         'uuid',
         'name',
         'url',
+        'description',
+        'price',
+        'image',
     ];
 
-    public function company(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
-    }
-
-    public function items(): HasMany
-    {
-        return $this->hasMany(Item::class);
+        return $this->belongsTo(Category::class);
     }
 }

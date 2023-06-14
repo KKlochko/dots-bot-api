@@ -27,6 +27,7 @@ Route::group([
         Route::apiResource('cities', CityController::class);
         Route::apiResource('companies', CompanyController::class);
         Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('items', ItemController::class);
     }
 );
 
