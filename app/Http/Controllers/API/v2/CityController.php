@@ -11,6 +11,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\v2\CityResource;
 use App\Http\Resources\API\v2\CityCollection;
 
+// Dots API
+use App\DotsAPI\Fetcher\v2\ApiFetcher;
+use App\DotsAPI\API\v2\CityAPI;
+
 class CityController extends Controller
 {
     /**
@@ -18,6 +22,12 @@ class CityController extends Controller
      */
     public function index(Request $request)
     {
+        // Update list of cities
+        $fetcher = new ApiFetcher();
+        $cityAPI = new CityAPI($fetcher);
+
+        $citiesMap = $cityAPI->getMap();
+        $cityAPI->saveMap($citiesMap);
 
         return new CityCollection(City::all());
     }

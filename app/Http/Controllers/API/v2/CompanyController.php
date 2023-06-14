@@ -11,6 +11,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\v2\CompanyResource;
 use App\Http\Resources\API\v2\CompanyCollection;
 
+// Dots API
+use App\DotsAPI\Fetcher\v2\ApiFetcher;
+use App\DotsAPI\API\v2\CompanyAPI;
+
 class CompanyController extends Controller
 {
     /**
@@ -18,6 +22,15 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
+        $city_uuid = $request->input('uuid');
+
+        // Update list of companies
+        $fetcher = new ApiFetcher();
+        $companyAPI = new CompanyAPI($fetcher);
+
+        $companyMap = $companyAPI->getMap($city_uuid);
+        $companyAPI->saveMap($companyMap);
+
         return new CompanyCollection(Company::all());
     }
 
