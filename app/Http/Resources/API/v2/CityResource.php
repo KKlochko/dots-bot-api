@@ -19,6 +19,7 @@ class CityResource extends JsonResource
             'id' => $this->id,
             'uuid' => $this->uuid,
             'name' => $this->name,
+            'url' => $this->url,
         ];
     }
 }
