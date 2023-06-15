@@ -7,7 +7,7 @@ use App\Models\City;
 
 class CityAPI extends AbstractItemAPI
 {
-    public function getMap() {
+    public function getMap($context = null) {
         $endpoint = '/api/v2/cities';
 
         $citiesMap = $this->fetcher->get($endpoint);
