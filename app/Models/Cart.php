@@ -12,7 +12,7 @@ class Cart extends Model
     use HasFactory;
 
     protected $fillable = [
-        'status',
+        'status', // CART | DONE
     ];
 
     public function city(): BelongsTo
@@ -28,6 +28,26 @@ class Cart extends Model
     public function items(): BelongsToMany
     {
         return $this->belongsToMany(Item::class, 'carts_items', 'cart_id', 'item_id');
+    }
+
+    public function isEmpty() {
+        return $this->items()->isEmpty();
+    }
+
+    public function setCity($city) {
+        if($this->city == $city)
+            return;
+
+        $this->city = $city;
+
+        if(!$this->isEmpty())
+            $this->dropItems();
+
+        $this->save();
+    }
+
+    public function dropItems() {
+        $this->items()->detach();
     }
 }
 
