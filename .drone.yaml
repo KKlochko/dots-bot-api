@@ -1,0 +1,30 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: install dependencies
+    image: laradock/workspace:latest-8.2
+    commands:
+      - cp .env.example .env
+      - composer install --prefer-dist
+      - php artisan key:generate
+
+  - name: run migrations
+    image: laradock/workspace:latest-8.2
+    commands:
+      - php artisan migrate
+
+  - name: run tests
+    image: laradock/workspace:latest-8.2
+    commands:
+      - php artisan test
+
+services:
+  - name: postgres
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: testpassword
+
