@@ -55,7 +55,7 @@ class UserController extends Controller
 
         $user = User::where('username', $username)->first();
 
-        if($user) {
+        if(!$user) {
             return response()->json([
                 'error' => 'A user with the username does not exist!!!'
             ]);
