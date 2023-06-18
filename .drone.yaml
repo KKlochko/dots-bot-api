@@ -13,7 +13,7 @@ steps:
   - name: run migrations
     image: laradock/workspace:latest-8.2
     commands:
-      - php artisan migrate
+      - php artisan migrate --seed
 
   - name: run tests
     image: laradock/workspace:latest-8.2
