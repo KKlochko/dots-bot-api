@@ -7,12 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use App\Models\City;
+
 class Cart extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'status', // CART | DONE
+        'user_id',
+        'city_id',
+        'company_id'
     ];
 
     public function city(): BelongsTo
@@ -34,11 +39,11 @@ class Cart extends Model
         return $this->items()->isEmpty();
     }
 
-    public function setCity($city) {
-        if($this->city == $city)
+    public function setCity(City $city) {
+        if($this->city_id == $city->id)
             return;
 
-        $this->city = $city;
+        $this->city_id = $city->id;
 
         if(!$this->isEmpty())
             $this->dropItems();
