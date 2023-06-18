@@ -19,6 +19,7 @@ class CityFactory extends Factory
         return [
             'uuid' => $this->faker->uuid(),
             'name' => $this->faker->city(),
+            'url' => $this->faker->city(),
         ];
     }
 }
