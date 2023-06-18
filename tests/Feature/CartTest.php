@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 use App\Models\User;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Cart;
 
 class CartTest extends TestCase
@@ -15,9 +16,12 @@ class CartTest extends TestCase
     protected $test_user_username = 'Test';
     protected $test_city_name = 'testCity';
     protected $test_city_name2 = 'testCity2';
+    protected $test_company_name = 'testCompany';
+    protected $test_company_name2 = 'testCompany2';
 
     protected $test_user;
     protected $test_city;
+    protected $test_company;
 
     public function test_get_data(): void
     {
@@ -83,6 +87,63 @@ class CartTest extends TestCase
             'status' => 'CART',
         ]);
     }
+
+    public function test_select_company_first_time(): void
+    {
+        $this->test_user = User::where('username', $this->test_user_username)->first();
+        $this->test_company = Company::where('name', $this->test_company_name)->first();
+
+        $this->assertNotNull($this->test_user);
+        $this->assertNotNull($this->test_company);
+
+        $response = $this->post('/api/v2/select-company', [
+            'matrix_username' => $this->test_user->matrix_username,
+            'company_name' => $this->test_company->name,
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'ok' => 'Company selected successfully',
+            'name' => $this->test_company->name,
+            'uuid' => $this->test_company->uuid,
+        ]);
+
+        $this->assertDatabaseHas('carts', [
+            'company_id' => $this->test_company->id,
+            'user_id' => $this->test_user->id,
+            'status' => 'CART',
+        ]);
+    }
+
+    public function test_select_another_company(): void
+    {
+        $this->test_user = User::where('username', $this->test_user_username)->first();
+        $this->test_company = Company::where('name', $this->test_company_name2)->first();
+
+        $this->assertNotNull($this->test_user);
+        $this->assertNotNull($this->test_company);
+
+        $response = $this->post('/api/v2/select-company', [
+            'matrix_username' => $this->test_user->matrix_username,
+            'company_name' => $this->test_company->name,
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'ok' => 'Company changed successfully',
+            'name' => $this->test_company->name,
+            'uuid' => $this->test_company->uuid,
+        ]);
+
+        $this->assertDatabaseHas('carts', [
+            'company_id' => $this->test_company->id,
+            'user_id' => $this->test_user->id,
+            'status' => 'CART',
+        ]);
+    }
+
 
     public function test_removing_cart(): void
     {
