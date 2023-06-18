@@ -21,4 +21,25 @@ class Company extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    public static function validate_with_name(string $name)
+    {
+        $name = $name ?? '';
+
+        if($name == '')
+            return [
+                'error' => 'The company name is empty, please, write the name!!!'
+            ];
+
+        $company = company::where('name', $name)->first();
+
+        if(!$company)
+            return [
+                'error' => 'A company with the name does not exist!!!'
+            ];
+
+        return [
+            'ok' => 'A company with the name is valid.'
+        ];
+    }
 }
