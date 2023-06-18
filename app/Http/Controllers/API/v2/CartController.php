@@ -6,6 +6,13 @@ use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
 use App\Http\Resources\API\v2\CartResource;
 use App\Models\Cart;
+use App\Models\User;
+use App\Models\City;
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\v2\UserController;
+use Illuminate\Auth\Events\Validated;
 
 class CartController extends Controller
 {
@@ -15,6 +22,51 @@ class CartController extends Controller
     public function index()
     {
         //
+    }
+
+    public function selectCity(Request $request) {
+        $matrix_username = $request->input('matrix_username') ?? '';
+        $city_name = $request->input('city_name') ?? '';
+
+        // check for not valid user
+        $validation = User::validate_with_matrix_username($matrix_username);
+        if(array_key_exists('error', $validation))
+            return response()->json($validation);
+
+        // check for not valid city
+        $validation = City::validate_with_name($city_name);
+        if(array_key_exists('error', $validation))
+            return response()->json($validation);
+
+        // Get objects
+        $user = User::where('matrix_username', $matrix_username)->first();
+        $city = City::where('name', $city_name)->first();
+
+        $cart = Cart::firstOrCreate(
+            [
+                'user_id' => $user->id,
+                'status' => 'CART'
+            ],
+            [
+                'city_id' => $city->id,
+            ]
+        );
+
+        if($cart->city_id != $city->id) {
+            $cart->setCity($city);
+
+            return response()->json([
+                'ok' => 'City changed successfully',
+                'name' => $city->name,
+                'uuid' => $city->uuid,
+            ]);
+        }
+
+        return response()->json([
+            'ok' => 'City selected successfully',
+            'name' => $city->name,
+            'uuid' => $city->uuid,
+        ]);
     }
 
     /**

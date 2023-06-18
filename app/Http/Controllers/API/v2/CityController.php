@@ -32,20 +32,6 @@ class CityController extends Controller
         return new CityCollection(City::all());
     }
 
-    public function selectCity(Request $request)
-    {
-        $name = $request->input('name');
-        $uuid = $request->input('uuid');
-
-        // Process the received name and uuid as required
-
-        // Return a response
-        return response()->json([
-            'message' => 'City selected successfully',
-            'name' => $name,
-            'uuid' => $uuid,
-        ]);
-    }
 
     /**
      * Show the form for creating a new resource.
