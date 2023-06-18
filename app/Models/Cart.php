@@ -37,7 +37,7 @@ class Cart extends Model
     }
 
     public function isEmpty() {
-        return $this->items()->isEmpty();
+        return count($this->items()->pluck('item_id')->toArray());
     }
 
     public function setCity(City $city) {
