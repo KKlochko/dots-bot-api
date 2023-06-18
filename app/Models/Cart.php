@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use App\Models\City;
+use App\Models\Company;
 use Brick\Math\BigInteger;
 
 class Cart extends Model
@@ -52,7 +53,21 @@ class Cart extends Model
         $this->save();
     }
 
-    public function addItem(BigInteger $item) {
+    public function setCompany(Company $company)
+    {
+        if($this->company_id == $company->id)
+            return;
+
+        $this->company_id = $company->id;
+
+        if(!$this->isEmpty())
+            $this->dropItems();
+
+        $this->save();
+    }
+
+    public function addItem(BigInteger $item)
+    {
         $this->items()->sync($item);
     }
 
