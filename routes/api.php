@@ -29,6 +29,9 @@ Route::group([
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('items', ItemController::class);
 
+        // Cart
+        Route::post('select-city', 'CartController@selectCity');
+
         // User
         Route::post('register', 'UserController@register');
         Route::post('login', 'UserController@login');
