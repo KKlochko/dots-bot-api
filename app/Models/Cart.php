@@ -47,6 +47,10 @@ class Cart extends Model
         return count($this->getItemIds());
     }
 
+    public function dropItems() {
+        $this->items()->detach();
+    }
+
     public function setCity(City $city)
     {
         if($this->city_id == $city->id)
@@ -78,20 +82,19 @@ class Cart extends Model
         $this->items()->sync($item);
     }
 
-    public function addItems(array $items) {
+    public function addItems(array $items)
+    {
         $this->items()->sync($items);
     }
 
-    public function removeItem(BigInteger $item) {
+    public function removeItem(BigInteger $item)
+    {
         $this->items()->sync($item);
     }
 
-    public function removeItems(array $items) {
+    public function removeItems(array $items)
+    {
         $this->items()->sync($items);
-    }
-
-    public function dropItems() {
-        $this->items()->detach();
     }
 }
 
