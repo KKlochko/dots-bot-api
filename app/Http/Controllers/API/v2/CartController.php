@@ -8,6 +8,7 @@ use App\Http\Resources\API\v2\CartResource;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\City;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -66,6 +67,48 @@ class CartController extends Controller
             'ok' => 'City selected successfully',
             'name' => $city->name,
             'uuid' => $city->uuid,
+        ]);
+    }
+
+    public function selectCompany(Request $request) {
+        $matrix_username = $request->input('matrix_username') ?? '';
+        $company_name = $request->input('company_name') ?? '';
+
+        // check for not valid user
+        $validation = User::validate_with_matrix_username($matrix_username);
+        if(array_key_exists('error', $validation))
+            return response()->json($validation);
+
+        // check for not valid company
+        $validation = Company::validate_with_name($company_name);
+        if(array_key_exists('error', $validation))
+            return response()->json($validation);
+
+        // Get objects
+        $user = User::where('matrix_username', $matrix_username)->first();
+        $company = Company::where('name', $company_name)->first();
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user->id,
+            'status' => 'CART'
+        ]);
+
+        if($cart->company_id != $company->id && $cart->company_id != null) {
+            $cart->setCompany($company);
+
+            return response()->json([
+                'ok' => 'Company changed successfully',
+                'name' => $company->name,
+                'uuid' => $company->uuid,
+            ]);
+        }
+
+        $cart->setCompany($company);
+
+        return response()->json([
+            'ok' => 'Company selected successfully',
+            'name' => $company->name,
+            'uuid' => $company->uuid,
         ]);
     }
 

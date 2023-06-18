@@ -31,6 +31,7 @@ Route::group([
 
         // Cart
         Route::post('select-city', 'CartController@selectCity');
+        Route::post('select-company', 'CartController@selectCompany');
 
         // User
         Route::post('register', 'UserController@register');
