@@ -37,11 +37,18 @@ class Cart extends Model
         return $this->belongsToMany(Item::class, 'carts_items', 'cart_id', 'item_id');
     }
 
-    public function isEmpty() {
-        return count($this->items()->pluck('item_id')->toArray());
+    public function getItemIds(): array
+    {
+        return $this->items()->pluck('item_id')->toArray();
     }
 
-    public function setCity(City $city) {
+    public function isEmpty()
+    {
+        return count($this->getItemIds());
+    }
+
+    public function setCity(City $city)
+    {
         if($this->city_id == $city->id)
             return;
 
