@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\API\v2\UserController;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
+use Illuminate\Http\Request;
 
 use App\Models\User;
 
@@ -86,5 +89,32 @@ class UserTest extends TestCase
         $this->assertDatabaseMissing('users', [
             'username' => $this->username
         ]);
+    }
+
+    /* User validation */
+
+    public function test_empty_username_with_matrix_username(): void
+    {
+        $json = User::validate_with_matrix_username('');
+
+        $this->assertEquals($json['error'], 'The username is empty, please, write username!!!');
+    }
+
+    public function test_not_existing_user_with_matrix_username(): void
+    {
+        $matrix_username = '@kostia:test.com';
+
+        $json = User::validate_with_matrix_username($matrix_username);
+
+        $this->assertEquals($json['error'], 'A user with the username does not exist!!!');
+    }
+
+    public function test_valid_user_with_matrix_username(): void
+    {
+        $matrix_username = '@test:test.com';
+
+        $json = User::validate_with_matrix_username($matrix_username);
+
+        $this->assertEquals($json['ok'], 'A user with the username is valid.');
     }
 }
