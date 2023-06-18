@@ -8,10 +8,17 @@ use App\Models\City;
 
 class CitySeeder extends Seeder
 {
-    protected $test_city = [
-        'uuid' => 'b7307b09-fc0c-4d0d-a556-ed70fc8e40f7',
-        'name' => 'testCity',
-        'url' => 'test_city'
+    protected $test_cities = [
+        [
+            'uuid' => 'b7307b09-fc0c-4d0d-a556-ed70fc8e40f7',
+            'name' => 'testCity',
+            'url' => 'test_city'
+        ],
+        [
+            'uuid' => 'b7307b09-fc0c-4d0d-a556-ed50fc8e40f7',
+            'name' => 'testCity2',
+            'url' => 'test_city2'
+        ]
     ];
 
     /**
@@ -23,6 +30,7 @@ class CitySeeder extends Seeder
             ->count(10)
             ->create();
 
-        City::factory()->create($this->test_city);
+        foreach($this->test_cities as $test_city)
+            City::factory()->create($test_city);
     }
 }
