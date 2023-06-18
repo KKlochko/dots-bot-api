@@ -56,7 +56,7 @@ class CartTest extends TestCase
         ]);
     }
 
-    public function test_select_another_city_time(): void
+    public function test_select_another_city(): void
     {
         $this->test_user = User::where('username', $this->test_user_username)->first();
         $this->test_city = City::where('name', $this->test_city_name2)->first();
