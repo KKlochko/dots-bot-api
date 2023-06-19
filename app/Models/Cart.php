@@ -51,6 +51,17 @@ class Cart extends Model
         return $this->items()->pluck('item_id')->toArray();
     }
 
+    public function isItemIn(Item $item): bool
+    {
+        $itemsIds = $this->getItemIds();
+
+        $countOfMatches = Item::whereIn('id', $itemsIds)
+                          ->where('uuid', $item->uuid)
+                          ->count();
+
+        return $countOfMatches != 0;
+    }
+
     public function isEmpty()
     {
         return count($this->getItemIds());
