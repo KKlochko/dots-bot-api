@@ -34,6 +34,15 @@ class Item extends Model
         $this->save();
     }
 
+    public function clone($count = 1): Item
+    {
+        $copyItem = $this->replicate();
+
+        $copyItem->setCount($count);
+
+        return $copyItem;
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
