@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use App\Models\City;
 use App\Models\Company;
-use Brick\Math\BigInteger;
 
 class Cart extends Model
 {
@@ -87,22 +86,22 @@ class Cart extends Model
         $this->save();
     }
 
-    public function addItem(BigInteger $item)
+    public function addItemId(int $item)
     {
         $this->items()->sync($item);
     }
 
-    public function addItems(array $items)
+    public function addItemIds(array $items)
     {
         $this->items()->sync($items);
     }
 
-    public function removeItem(BigInteger $item)
+    public function removeItemId(int $item)
     {
         $this->items()->sync($item);
     }
 
-    public function removeItems(array $items)
+    public function removeItemIds(array $items)
     {
         $this->items()->sync($items);
     }
