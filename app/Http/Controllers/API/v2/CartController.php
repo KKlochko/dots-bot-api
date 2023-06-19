@@ -9,6 +9,7 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -109,6 +110,63 @@ class CartController extends Controller
             'ok' => 'Company selected successfully',
             'name' => $company->name,
             'uuid' => $company->uuid,
+        ]);
+    }
+
+    public function addItem(Request $request) {
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $itemName = $request->input('itemName') ?? '';
+        $itemCount = $request->input('itemCount') ?? '';
+
+        // check for not valid user
+        $validation = User::validate_with_matrix_username($matrixUsername);
+        if(array_key_exists('error', $validation))
+            return response()->json($validation);
+
+        // check for not valid item
+        $validation = Item::validate_with_name($itemName);
+        if(array_key_exists('error', $validation))
+            return response()->json($validation);
+
+        if($itemCount == 0)
+            return response()->json([
+                'error' => 'The item count is zero!!! Please, choose the count!!!',
+            ]);
+
+        // Get objects
+        $user = User::where('matrix_username', $matrixUsername)->first();
+
+        // Select template item
+        $item = Item::where('name', $itemName)
+              ->where('count', 0)
+              ->first();
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user->id,
+            'status' => 'CART'
+        ]);
+
+        if($cart->isItemIn($item)) {
+            $cartItem = $cart->getItem($itemName);
+            $cartItem->setCount($cartItem->getCount() + $itemCount);
+
+            return response()->json([
+                'ok' => 'The item count is changed successfully',
+                'name' => $cartItem->name,
+                'uuid' => $cartItem->uuid,
+                'count' => $cartItem->count,
+            ]);
+        }
+
+        // Clone template value:
+        $cartItem = $item->clone($itemCount);
+        $cart->addItemId($cartItem->id);
+
+        return response()->json([
+            'ok' => 'The item added successfully',
+            'name' => $item->name,
+            'uuid' => $item->uuid,
+            'count' => $cartItem->count,
         ]);
     }
 
