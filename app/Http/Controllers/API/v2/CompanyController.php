@@ -15,6 +15,10 @@ use App\Http\Resources\API\v2\CompanyCollection;
 use App\DotsAPI\Fetcher\v2\ApiFetcher;
 use App\DotsAPI\API\v2\CompanyAPI;
 
+use App\Models\User;
+use App\Models\City;
+use App\Models\Cart;
+
 class CompanyController extends Controller
 {
     /**
@@ -22,7 +26,29 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        $city_uuid = $request->input('uuid');
+        $matrix_username = $request->input('matrix_username') ?? '';
+        $city_uuid = $request->input('uuid') ?? '';
+        $user = null;
+        $cart = null;
+        $city = null;
+
+        if($city_uuid != ''){
+            $city = City::where('uuid', $city_uuid)->first();
+        }
+
+        if($matrix_username) {
+            $user = User::firstOrCreate([
+                'matrix_username' => $matrix_username
+            ]);
+
+            $cart = Cart::firstOrCreate([
+                'user_id' => $user->id,
+                'status' => 'CART'
+            ]);
+
+            $city = $cart->getCity();
+            $city_uuid = $city->uuid;
+        }
 
         // Update list of companies
         $fetcher = new ApiFetcher();
