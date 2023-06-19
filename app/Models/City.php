@@ -21,6 +21,24 @@ class City extends Model
         return $this->belongsToMany(Company::class, 'cities_companies', 'city_id', 'company_id');
     }
 
+    public function getCompanyIds(): array
+    {
+        return $this->companies()->pluck('company_id')->toArray();
+    }
+
+
+    public function addCompanyIds(array $company_ids)
+    {
+        $companyIDs = array_merge($this->getCompanyIds(), $company_ids);
+        $this->companies()->sync($companyIDs);
+    }
+
+
+    public function removeCompanyIds(array $company_ids)
+    {
+        $this->companies()->detach($company_ids);
+    }
+
     public static function validate_with_name(string $name)
     {
         $name = $name ?? '';
