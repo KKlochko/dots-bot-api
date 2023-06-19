@@ -19,6 +19,7 @@ class CategoryResource extends JsonResource
             'uuid' => $this->uuid,
             'name' => $this->name,
             'url' => $this->url,
+            'items' => ItemResource::collection($this->whenLoaded('items'))
         ];
     }
 }
