@@ -11,14 +11,61 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\v2\CategoryResource;
 use App\Http\Resources\API\v2\CategoryCollection;
 
+// Dots API
+use App\DotsAPI\Fetcher\v2\ApiFetcher;
+use App\DotsAPI\API\v2\CategoryItemAPI;
+
+use App\Models\User;
+use App\Models\Cart;
+use App\Models\Company;
+
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new CategoryCollection(Category::all());
+        $matrix_username = $request->input('matrix_username') ?? '';
+        $company_uuid = $request->input('uuid') ?? '';
+        $user = null;
+        $cart = null;
+        $company = null;
+
+        if($company_uuid != ''){
+            $company = Company::where('uuid', $company_uuid)->first();
+        }
+
+        if($matrix_username) {
+            $user = User::firstOrCreate([
+                'matrix_username' => $matrix_username
+            ]);
+
+            $cart = Cart::firstOrCreate([
+                'user_id' => $user->id,
+                'status' => 'CART'
+            ]);
+
+            $company = $cart->getCompany();
+            $company_uuid = $company->uuid;
+        }
+
+        if(!$company)
+            return response()->json([
+                'error' => '404 company'
+            ]);
+
+        // Update list of companies
+        $fetcher = new ApiFetcher();
+        $categoryItemAPI = new CategoryItemAPI($fetcher);
+
+        $categoriesItemsMap = $categoryItemAPI->getMap($company_uuid);
+        $categoryItemAPI->saveMap($categoriesItemsMap, $company);
+
+        // Companies Categories
+        $categories = Category::where('company_id', $company->id)->get();
+
+        return new CategoryCollection($categories);
     }
 
     /**
