@@ -26,6 +26,10 @@ class City extends Model
         return $this->companies()->pluck('company_id')->toArray();
     }
 
+    public function addCompanyId(int $company_id)
+    {
+        $this->addCompanyIds([$company_id]);
+    }
 
     public function addCompanyIds(array $company_ids)
     {
@@ -33,6 +37,10 @@ class City extends Model
         $this->companies()->sync($companyIDs);
     }
 
+    public function removeCompanyID(int $company_id)
+    {
+        $this->companies()->detach($company_id);
+    }
 
     public function removeCompanyIds(array $company_ids)
     {
