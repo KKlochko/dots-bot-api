@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description');
             $table->decimal('price', 8, 2);
             $table->string('image')->nullable();
+            $table->bigInteger('count')->default(0);
 
             $table->foreign('category_id')->references('id')
                  ->on('categories')->onDelete('cascade');

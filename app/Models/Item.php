@@ -19,7 +19,20 @@ class Item extends Model
         'price',
         'image',
         'category_id',
+        // if an item in a cart, then the count is a nonzero value.
+        'count',
     ];
+
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    public function setCount($count = 1)
+    {
+        $this->count = $count;
+        $this->save();
+    }
 
     public function category(): BelongsTo
     {
