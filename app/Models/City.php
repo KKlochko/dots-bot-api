@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class City extends Model
 {
@@ -14,6 +15,11 @@ class City extends Model
         'name',
         'url',
     ];
+
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'cities_companies', 'city_id', 'company_id');
+    }
 
     public static function validate_with_name(string $name)
     {
