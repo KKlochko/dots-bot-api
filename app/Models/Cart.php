@@ -50,11 +50,10 @@ class Cart extends Model
     {
         $itemsIds = $this->getItemIds();
 
-        $itemId = Item::whereIn('id', $itemsIds)
-            ->where('uuid', $name)
-            ->count();
+        $item = Item::whereIn('id', $itemsIds)
+                ->where('name', $name)->first();
 
-        return Item::where('id', $itemId)->first();
+        return $item;
     }
 
     public function getItemIds(): array
