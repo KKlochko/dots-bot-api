@@ -15,6 +15,7 @@ class Category extends Model
         'uuid',
         'name',
         'url',
+        'company_id',
     ];
 
     public function company(): BelongsTo
