@@ -107,24 +107,25 @@ class Cart extends Model
         $this->save();
     }
 
-    public function addItemId(int $item)
+    public function addItemId(int $item_id)
     {
-        $this->items()->sync($item);
+        $this->addItemIds([$item_id]);
     }
 
-    public function addItemIds(array $items)
+    public function addItemIds(array $item_ids)
     {
-        $this->items()->sync($items);
+        $itemIDs = array_merge($this->getItemIds(), $item_ids);
+        $this->companies()->sync($itemIDs);
     }
 
-    public function removeItemId(int $item)
+    public function removeItemId(int $item_id)
     {
-        $this->items()->sync($item);
+        $this->items()->detach($item_id);
     }
 
-    public function removeItemIds(array $items)
+    public function removeItemIds(array $items_ids)
     {
-        $this->items()->sync($items);
+        $this->items()->detach($items_ids);
     }
 }
 
