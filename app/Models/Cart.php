@@ -27,9 +27,19 @@ class Cart extends Model
         return $this->belongsTo(City::class);
     }
 
+    public function getCity(): City
+    {
+        return City::where('city_id', $this->city_id)->first();
+    }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function getCompany(): Company
+    {
+        return Company::where('company_id', $this->company_id)->first();
     }
 
     public function items(): BelongsToMany
