@@ -15,7 +15,7 @@ class CityAPI extends AbstractItemAPI
         return $citiesMap;
     }
 
-    public function saveMap($cities) {
+    public function saveMap($cities, $parent = null) {
         foreach ($cities as $city) {
             $uuid = $city['id'];
             $name = $city['name'];

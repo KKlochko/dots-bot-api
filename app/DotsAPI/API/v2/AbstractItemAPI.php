@@ -15,6 +15,6 @@ abstract class AbstractItemAPI
 
     abstract public function getMap($context = null);
 
-    abstract public function saveMap($map);
+    abstract public function saveMap($map, $parent = null);
 }
 

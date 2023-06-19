@@ -15,7 +15,7 @@ class CompanyAPI extends AbstractItemAPI
         return $companiesMap;
     }
 
-    public function saveMap($companies) {
+    public function saveMap($companies, $city = null) {
         foreach ($companies as $company) {
             $uuid = $company['id'];
             $name = $company['name'];
