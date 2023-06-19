@@ -115,7 +115,7 @@ class Cart extends Model
     public function addItemIds(array $item_ids)
     {
         $itemIDs = array_merge($this->getItemIds(), $item_ids);
-        $this->companies()->sync($itemIDs);
+        $this->items()->sync($itemIDs);
     }
 
     public function removeItemId(int $item_id)
