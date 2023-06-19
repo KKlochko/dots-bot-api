@@ -9,6 +9,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\Item;
 use App\Models\Cart;
 
 class CartTest extends TestCase
@@ -19,9 +20,13 @@ class CartTest extends TestCase
     protected $test_company_name = 'testCompany';
     protected $test_company_name2 = 'testCompany2';
 
+    protected $test_item_name = 'Pizza Polo';
+    protected $test_item_name2 = 'Pizza Cezar';
+
     protected $test_user;
     protected $test_city;
     protected $test_company;
+    protected $test_item;
 
     public function test_get_data(): void
     {
@@ -144,6 +149,121 @@ class CartTest extends TestCase
         ]);
     }
 
+    /* Test cart and items */
+
+    public function testAddFirstCartItem(): int
+    {
+        $this->test_user = User::where('username', $this->test_user_username)->first();
+        $this->test_item = Item::where('name', $this->test_item_name)->first();
+        $count = 2;
+
+        $this->assertNotNull($this->test_user);
+        $this->assertNotNull($this->test_item);
+
+        $response = $this->post('/api/v2/add-item', [
+            'matrixUsername' => $this->test_user->matrix_username,
+            'itemName' => $this->test_item->name,
+            'itemCount' => $count,
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'ok' => 'The item added successfully',
+            'name' => $this->test_item->name,
+            'uuid' => $this->test_item->uuid,
+            'count' => $count,
+        ]);
+
+        return $count;
+    }
+
+    /**
+      * @depends testAddFirstCartItem
+      */
+    public function testExistingNewCartItem($count): int
+    {
+        $this->test_item = Item::where('name', $this->test_item_name)->first();
+
+        $this->assertNotNull($this->test_item);
+
+        $this->assertDatabaseHas('items', [
+            'uuid' => $this->test_item->uuid,
+            'name' => $this->test_item->name,
+            'count' => $count,
+        ]);
+
+        return $count;
+    }
+
+    /**
+      * @depends testExistingNewCartItem
+      */
+    public function testExistingCartItemRelationship($count): int
+    {
+        $this->test_item = Item::where('name', $this->test_item_name)->first();
+
+        $this->assertNotNull($this->test_item);
+
+        $cart_item = Item::where('uuid', $this->test_item->uuid)
+                   ->where('count', $count)
+                   ->first();
+
+        $this->assertDatabaseHas('carts_items', [
+            'item_id' => $cart_item->id,
+        ]);
+
+        return $count;
+    }
+
+    /**
+      * @depends testExistingCartItemRelationship
+      */
+    public function testAddItemAgain($count): int
+    {
+        $this->test_user = User::where('username', $this->test_user_username)->first();
+        $this->test_item = Item::where('name', $this->test_item_name)->first();
+
+        $this->assertNotNull($this->test_user);
+        $this->assertNotNull($this->test_item);
+
+        $response = $this->post('/api/v2/add-item', [
+            'matrixUsername' => $this->test_user->matrix_username,
+            'itemName' => $this->test_item->name,
+            // the count as before
+            'itemCount' => $count,
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'ok' => 'The item count is changed successfully',
+            'name' => $this->test_item->name,
+            'uuid' => $this->test_item->uuid,
+            // the count as before, therefore it must be doubled.
+            'count' => $count * 2,
+        ]);
+
+        return $count;
+    }
+
+    /**
+      * @depends testAddItemAgain
+      */
+    public function testDoubledItemCount($count): void
+    {
+        $this->test_user = User::where('username', $this->test_user_username)->first();
+        $this->test_item = Item::where('name', $this->test_item_name)->first();
+
+        $this->assertNotNull($this->test_user);
+        $this->assertNotNull($this->test_item);
+
+        $this->assertDatabaseHas('items', [
+            'uuid' => $this->test_item->uuid,
+            'name' => $this->test_item->name,
+            'count' => $count * 2,
+        ]);
+    }
 
     public function test_removing_cart(): void
     {
