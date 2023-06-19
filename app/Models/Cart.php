@@ -46,6 +46,17 @@ class Cart extends Model
         return $this->belongsToMany(Item::class, 'carts_items', 'cart_id', 'item_id');
     }
 
+    public function getItem(string $name): Item
+    {
+        $itemsIds = $this->getItemIds();
+
+        $itemId = Item::whereIn('id', $itemsIds)
+            ->where('uuid', $name)
+            ->count();
+
+        return Item::where('id', $itemId)->first();
+    }
+
     public function getItemIds(): array
     {
         return $this->items()->pluck('item_id')->toArray();
