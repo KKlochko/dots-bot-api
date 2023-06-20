@@ -14,137 +14,137 @@ use App\Models\Cart;
 
 class CartTest extends TestCase
 {
-    protected $test_user_username = 'Test';
-    protected $test_city_name = 'testCity';
-    protected $test_city_name2 = 'testCity2';
-    protected $test_company_name = 'testCompany';
-    protected $test_company_name2 = 'testCompany2';
+    protected $testUserUsername = 'Test';
+    protected $testCityName = 'testCity';
+    protected $testCityName2 = 'testCity2';
+    protected $testCompanyName = 'testCompany';
+    protected $testCompanyName2 = 'testCompany2';
 
-    protected $test_item_name = 'Pizza Polo';
-    protected $test_item_name2 = 'Pizza Cezar';
+    protected $testItemName = 'Pizza Polo';
+    protected $testItemName2 = 'Pizza Cezar';
 
-    protected $test_user;
-    protected $test_city;
-    protected $test_company;
-    protected $test_item;
+    protected $testUser;
+    protected $testCity;
+    protected $testCompany;
+    protected $testItem;
 
     public function test_get_data(): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_city = City::where('name', $this->test_city_name)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testCity = City::where('name', $this->testCityName)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_city);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testCity);
     }
 
     public function test_select_city_first_time(): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_city = City::where('name', $this->test_city_name)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testCity = City::where('name', $this->testCityName)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_city);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testCity);
 
         $response = $this->post('/api/v2/select-city', [
-            'matrix_username' => $this->test_user->matrix_username,
-            'city_name' => $this->test_city->name,
+            'matrixUsername' => $this->testUser->matrix_username,
+            'cityName' => $this->testCity->name,
         ]);
 
         $response->assertStatus(200);
 
         $response->assertJson([
             'ok' => 'City selected successfully',
-            'name' => $this->test_city->name,
-            'uuid' => $this->test_city->uuid,
+            'name' => $this->testCity->name,
+            'uuid' => $this->testCity->uuid,
         ]);
 
         $this->assertDatabaseHas('carts', [
-            'city_id' => $this->test_city->id,
-            'user_id' => $this->test_user->id,
+            'city_id' => $this->testCity->id,
+            'user_id' => $this->testUser->id,
             'status' => 'CART',
         ]);
     }
 
     public function test_select_another_city(): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_city = City::where('name', $this->test_city_name2)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testCity = City::where('name', $this->testCityName2)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_city);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testCity);
 
         $response = $this->post('/api/v2/select-city', [
-            'matrix_username' => $this->test_user->matrix_username,
-            'city_name' => $this->test_city->name,
+            'matrixUsername' => $this->testUser->matrix_username,
+            'cityName' => $this->testCity->name,
         ]);
 
         $response->assertStatus(200);
 
         $response->assertJson([
             'ok' => 'City changed successfully',
-            'name' => $this->test_city->name,
-            'uuid' => $this->test_city->uuid,
+            'name' => $this->testCity->name,
+            'uuid' => $this->testCity->uuid,
         ]);
 
         $this->assertDatabaseHas('carts', [
-            'city_id' => $this->test_city->id,
-            'user_id' => $this->test_user->id,
+            'city_id' => $this->testCity->id,
+            'user_id' => $this->testUser->id,
             'status' => 'CART',
         ]);
     }
 
     public function test_select_company_first_time(): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_company = Company::where('name', $this->test_company_name)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testCompany = Company::where('name', $this->testCompanyName)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_company);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testCompany);
 
         $response = $this->post('/api/v2/select-company', [
-            'matrix_username' => $this->test_user->matrix_username,
-            'company_name' => $this->test_company->name,
+            'matrixUsername' => $this->testUser->matrix_username,
+            'companyName' => $this->testCompany->name,
         ]);
 
         $response->assertStatus(200);
 
         $response->assertJson([
             'ok' => 'Company selected successfully',
-            'name' => $this->test_company->name,
-            'uuid' => $this->test_company->uuid,
+            'name' => $this->testCompany->name,
+            'uuid' => $this->testCompany->uuid,
         ]);
 
         $this->assertDatabaseHas('carts', [
-            'company_id' => $this->test_company->id,
-            'user_id' => $this->test_user->id,
+            'company_id' => $this->testCompany->id,
+            'user_id' => $this->testUser->id,
             'status' => 'CART',
         ]);
     }
 
     public function test_select_another_company(): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_company = Company::where('name', $this->test_company_name2)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testCompany = Company::where('name', $this->testCompanyName2)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_company);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testCompany);
 
         $response = $this->post('/api/v2/select-company', [
-            'matrix_username' => $this->test_user->matrix_username,
-            'company_name' => $this->test_company->name,
+            'matrixUsername' => $this->testUser->matrix_username,
+            'companyName' => $this->testCompany->name,
         ]);
 
         $response->assertStatus(200);
 
         $response->assertJson([
             'ok' => 'Company changed successfully',
-            'name' => $this->test_company->name,
-            'uuid' => $this->test_company->uuid,
+            'name' => $this->testCompany->name,
+            'uuid' => $this->testCompany->uuid,
         ]);
 
         $this->assertDatabaseHas('carts', [
-            'company_id' => $this->test_company->id,
-            'user_id' => $this->test_user->id,
+            'company_id' => $this->testCompany->id,
+            'user_id' => $this->testUser->id,
             'status' => 'CART',
         ]);
     }
@@ -153,16 +153,16 @@ class CartTest extends TestCase
 
     public function testAddFirstCartItem(): int
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_item = Item::where('name', $this->test_item_name)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testItem = Item::where('name', $this->testItemName)->first();
         $count = 2;
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_item);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testItem);
 
         $response = $this->post('/api/v2/add-item', [
-            'matrixUsername' => $this->test_user->matrix_username,
-            'itemName' => $this->test_item->name,
+            'matrixUsername' => $this->testUser->matrix_username,
+            'itemName' => $this->testItem->name,
             'itemCount' => $count,
         ]);
 
@@ -170,8 +170,8 @@ class CartTest extends TestCase
 
         $response->assertJson([
             'ok' => 'The item added successfully',
-            'name' => $this->test_item->name,
-            'uuid' => $this->test_item->uuid,
+            'name' => $this->testItem->name,
+            'uuid' => $this->testItem->uuid,
             'count' => $count,
         ]);
 
@@ -183,13 +183,13 @@ class CartTest extends TestCase
       */
     public function testExistingNewCartItem($count): int
     {
-        $this->test_item = Item::where('name', $this->test_item_name)->first();
+        $this->testItem = Item::where('name', $this->testItemName)->first();
 
-        $this->assertNotNull($this->test_item);
+        $this->assertNotNull($this->testItem);
 
         $this->assertDatabaseHas('items', [
-            'uuid' => $this->test_item->uuid,
-            'name' => $this->test_item->name,
+            'uuid' => $this->testItem->uuid,
+            'name' => $this->testItem->name,
             'count' => $count,
         ]);
 
@@ -201,11 +201,11 @@ class CartTest extends TestCase
       */
     public function testExistingCartItemRelationship($count): int
     {
-        $this->test_item = Item::where('name', $this->test_item_name)->first();
+        $this->testItem = Item::where('name', $this->testItemName)->first();
 
-        $this->assertNotNull($this->test_item);
+        $this->assertNotNull($this->testItem);
 
-        $cart_item = Item::where('uuid', $this->test_item->uuid)
+        $cart_item = Item::where('uuid', $this->testItem->uuid)
                    ->where('count', $count)
                    ->first();
 
@@ -221,15 +221,15 @@ class CartTest extends TestCase
       */
     public function testAddItemAgain($count): int
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_item = Item::where('name', $this->test_item_name)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testItem = Item::where('name', $this->testItemName)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_item);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testItem);
 
         $response = $this->post('/api/v2/add-item', [
-            'matrixUsername' => $this->test_user->matrix_username,
-            'itemName' => $this->test_item->name,
+            'matrixUsername' => $this->testUser->matrix_username,
+            'itemName' => $this->testItem->name,
             // the count as before
             'itemCount' => $count,
         ]);
@@ -238,8 +238,8 @@ class CartTest extends TestCase
 
         $response->assertJson([
             'ok' => 'The item count is changed successfully',
-            'name' => $this->test_item->name,
-            'uuid' => $this->test_item->uuid,
+            'name' => $this->testItem->name,
+            'uuid' => $this->testItem->uuid,
             // the count as before, therefore it must be doubled.
             'count' => $count * 2,
         ]);
@@ -252,30 +252,31 @@ class CartTest extends TestCase
       */
     public function testDoubledItemCount($count): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_item = Item::where('name', $this->test_item_name)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testItem = Item::where('name', $this->testItemName)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_item);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testItem);
 
         $this->assertDatabaseHas('items', [
-            'uuid' => $this->test_item->uuid,
-            'name' => $this->test_item->name,
+            'uuid' => $this->testItem->uuid,
+            'name' => $this->testItem->name,
             'count' => $count * 2,
         ]);
     }
 
+    // TODO item from another company -> error
     public function test_removing_cart(): void
     {
-        $this->test_user = User::where('username', $this->test_user_username)->first();
-        $this->test_city = City::where('name', $this->test_city_name2)->first();
+        $this->testUser = User::where('username', $this->testUserUsername)->first();
+        $this->testCity = City::where('name', $this->testCityName2)->first();
 
-        $this->assertNotNull($this->test_user);
-        $this->assertNotNull($this->test_city);
+        $this->assertNotNull($this->testUser);
+        $this->assertNotNull($this->testCity);
 
         $cart = Cart::where('status', 'CART')
-              ->where('user_id', $this->test_user->id)
-              ->where('city_id', $this->test_city->id)
+              ->where('user_id', $this->testUser->id)
+              ->where('city_id', $this->testCity->id)
               ->first();
         $cart->delete();
 
@@ -283,20 +284,20 @@ class CartTest extends TestCase
 
         $this->assertDatabaseMissing('carts', [
             'status' => 'CART',
-            'user_id' => $this->test_user->id,
-            'city_id'=> $this->test_city->id
+            'user_id' => $this->testUser->id,
+            'city_id'=> $this->testCity->id
         ]);
     }
 
     public function test_select_city_with_no_city(): void
     {
-        $this->test_city = City::where('name', $this->test_city_name2)->first();
+        $this->testCity = City::where('name', $this->testCityName2)->first();
 
-        $this->assertNotNull($this->test_city);
+        $this->assertNotNull($this->testCity);
 
         $response = $this->post('/api/v2/select-city', [
-            'matrix_username' => '',
-            'city_name' => $this->test_city->name,
+            'matrixUsername' => '',
+            'cityName' => $this->testCity->name,
         ]);
 
         $response->assertStatus(200);
@@ -308,13 +309,13 @@ class CartTest extends TestCase
 
     public function test_select_city_with_no_user(): void
     {
-        $this->test_city = City::where('name', $this->test_city_name2)->first();
+        $this->testCity = City::where('name', $this->testCityName2)->first();
 
-        $this->assertNotNull($this->test_city);
+        $this->assertNotNull($this->testCity);
 
         $response = $this->post('/api/v2/select-city', [
-            'matrix_username' => '',
-            'city_name' => $this->test_city->name,
+            'matrixUsername' => '',
+            'cityName' => $this->testCity->name,
         ]);
 
         $response->assertStatus(200);

@@ -27,22 +27,22 @@ class CartController extends Controller
     }
 
     public function selectCity(Request $request) {
-        $matrix_username = $request->input('matrix_username') ?? '';
-        $city_name = $request->input('city_name') ?? '';
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $cityName = $request->input('cityName') ?? '';
 
         // check for not valid user
-        $validation = User::validate_with_matrix_username($matrix_username);
+        $validation = User::validate_with_matrix_username($matrixUsername);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
         // check for not valid city
-        $validation = City::validate_with_name($city_name);
+        $validation = City::validate_with_name($cityName);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
         // Get objects
-        $user = User::where('matrix_username', $matrix_username)->first();
-        $city = City::where('name', $city_name)->first();
+        $user = User::where('matrix_username', $matrixUsername)->first();
+        $city = City::where('name', $cityName)->first();
 
         $cart = Cart::firstOrCreate(
             [
@@ -72,22 +72,22 @@ class CartController extends Controller
     }
 
     public function selectCompany(Request $request) {
-        $matrix_username = $request->input('matrix_username') ?? '';
-        $company_name = $request->input('company_name') ?? '';
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $companyName = $request->input('companyName') ?? '';
 
         // check for not valid user
-        $validation = User::validate_with_matrix_username($matrix_username);
+        $validation = User::validate_with_matrix_username($matrixUsername);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
         // check for not valid company
-        $validation = Company::validate_with_name($company_name);
+        $validation = Company::validate_with_name($companyName);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
         // Get objects
-        $user = User::where('matrix_username', $matrix_username)->first();
-        $company = Company::where('name', $company_name)->first();
+        $user = User::where('matrix_username', $matrixUsername)->first();
+        $company = Company::where('name', $companyName)->first();
 
         $cart = Cart::firstOrCreate([
             'user_id' => $user->id,
