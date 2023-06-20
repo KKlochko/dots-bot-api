@@ -55,9 +55,11 @@ class CompanyController extends Controller
         $companyAPI = new CompanyAPI($fetcher);
 
         $companyMap = $companyAPI->getMap($city_uuid);
-        $companyAPI->saveMap($companyMap);
+        $companyAPI->saveMap($companyMap, $city);
 
-        return new CompanyCollection(Company::all());
+        $companies = $city->getCompanies();
+
+        return new CompanyCollection($companies);
     }
 
     /**
