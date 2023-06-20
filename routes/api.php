@@ -30,6 +30,7 @@ Route::group([
         Route::apiResource('items', ItemController::class);
 
         // Cart
+        Route::apiResource('cart', CartController::class);
         Route::post('select-city', 'CartController@selectCity');
         Route::post('select-company', 'CartController@selectCompany');
         Route::post('add-item', 'CartController@addItem');
