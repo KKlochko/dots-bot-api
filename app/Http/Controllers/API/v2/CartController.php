@@ -16,14 +16,33 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\v2\UserController;
 use Illuminate\Auth\Events\Validated;
 
+use App\Http\Resources\API\v2\CartItemCollection;
+
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $user = null;
+
+        if(!$matrixUsername)
+            return response()->json([
+                'error' => ''
+            ]);
+
+        $user = User::firstOrCreate([
+            'matrix_username' => $matrixUsername
+        ]);
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user->id,
+            'status' => 'CART'
+        ]);
+
+        return new CartItemCollection($cart->items);
     }
 
     public function selectCity(Request $request) {
