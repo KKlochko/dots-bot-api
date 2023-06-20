@@ -12,7 +12,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $username = $request->input('username') ?? '';
-        $matrix_username = $request->input('matrix_username') ?? '';
+        $matrixUsername = $request->input('matrixUsername') ?? '';
         $phone = $request->input('phone') ?? '';
 
         if($username == '') {
@@ -26,7 +26,7 @@ class UserController extends Controller
             // if username is free then the new user will be created
             // with addition arguments:
             [
-                'matrix_username' => $matrix_username,
+                'matrix_username' => $matrixUsername,
                 'phone' => $phone
             ]
         );
@@ -45,7 +45,7 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $username = $request->input('username') ?? '';
-        $matrix_username = $request->input('matrix_username') ?? '';
+        $matrixUsername = $request->input('matrixUsername') ?? '';
 
         if($username == '') {
             return response()->json([
@@ -63,8 +63,8 @@ class UserController extends Controller
 
         // Update matrix user if needed
         // TODO add verification check
-        if($user->matrix_username != $matrix_username) {
-            $user->matrix_username = $matrix_username;
+        if($user->matrix_username != $matrixUsername) {
+            $user->matrix_username = $matrixUsername;
             $user->save();
         }
 

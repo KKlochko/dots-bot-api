@@ -26,35 +26,36 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        $matrix_username = $request->input('matrix_username') ?? '';
-        $city_uuid = $request->input('uuid') ?? '';
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $cityUUID = $request->input('uuid') ?? '';
         $user = null;
         $cart = null;
         $city = null;
 
-        if($city_uuid != ''){
-            $city = City::where('uuid', $city_uuid)->first();
+        if($cityUUID != ''){
+            $city = City::where('uuid', $cityUUID)->first();
         }
 
-        if($matrix_username) {
+        if($matrixUsername) {
             $user = User::firstOrCreate([
-                'matrix_username' => $matrix_username
+                'matrix_username' => $matrixUsername
             ]);
 
+            // TODO valid city exists
             $cart = Cart::firstOrCreate([
                 'user_id' => $user->id,
                 'status' => 'CART'
             ]);
 
             $city = $cart->getCity();
-            $city_uuid = $city->uuid;
+            $cityUUID = $city->uuid;
         }
 
         // Update list of companies
         $fetcher = new ApiFetcher();
         $companyAPI = new CompanyAPI($fetcher);
 
-        $companyMap = $companyAPI->getMap($city_uuid);
+        $companyMap = $companyAPI->getMap($cityUUID);
         $companyAPI->saveMap($companyMap, $city);
 
         $companies = $city->getCompanies();

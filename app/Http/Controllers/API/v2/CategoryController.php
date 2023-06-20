@@ -26,19 +26,19 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $matrix_username = $request->input('matrix_username') ?? '';
-        $company_uuid = $request->input('uuid') ?? '';
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $companyUUID = $request->input('uuid') ?? '';
         $user = null;
         $cart = null;
         $company = null;
 
-        if($company_uuid != ''){
-            $company = Company::where('uuid', $company_uuid)->first();
+        if($companyUUID != ''){
+            $company = Company::where('uuid', $companyUUID)->first();
         }
 
-        if($matrix_username) {
+        if($matrixUsername) {
             $user = User::firstOrCreate([
-                'matrix_username' => $matrix_username
+                'matrix_username' => $matrixUsername
             ]);
 
             $cart = Cart::firstOrCreate([
@@ -47,7 +47,7 @@ class CategoryController extends Controller
             ]);
 
             $company = $cart->getCompany();
-            $company_uuid = $company->uuid;
+            $companyUUID = $company->uuid;
         }
 
         if(!$company)
@@ -59,7 +59,7 @@ class CategoryController extends Controller
         $fetcher = new ApiFetcher();
         $categoryItemAPI = new CategoryItemAPI($fetcher);
 
-        $categoriesItemsMap = $categoryItemAPI->getMap($company_uuid);
+        $categoriesItemsMap = $categoryItemAPI->getMap($companyUUID);
         $categoryItemAPI->saveMap($categoriesItemsMap, $company);
 
         // Companies Categories

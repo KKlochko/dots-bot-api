@@ -14,10 +14,10 @@ use App\Models\User;
 class UserTest extends TestCase
 {
     protected $username = 'Oleg';
-    protected $matrix_username = '@oleg:oleg.com';
+    protected $matrixUsername = '@oleg:oleg.com';
     protected $phone = '380671231212';
 
-    protected $not_existing_user = [
+    protected $notExistingUser = [
         'username' => 'Kostia',
         'matrix_username' => '@kostia:kostia.com',
     ];
@@ -26,7 +26,7 @@ class UserTest extends TestCase
     {
         $response = $this->post('/api/v2/register', [
             'username' => $this->username,
-            'matrix_username' => $this->matrix_username,
+            'matrix_username' => $this->matrixUsername,
             'phone' => $this->phone,
         ]);
 
@@ -45,7 +45,7 @@ class UserTest extends TestCase
     {
         $response = $this->post('/api/v2/register', [
             'username' => $this->username,
-            'matrix_username' => $this->matrix_username,
+            'matrix_username' => $this->matrixUsername,
             'phone' => $this->phone,
         ]);
 
@@ -58,7 +58,7 @@ class UserTest extends TestCase
 
     public function test_login_not_existing_user(): void
     {
-        $response = $this->post('/api/v2/login', $this->not_existing_user);
+        $response = $this->post('/api/v2/login', $this->notExistingUser);
 
         $response->assertStatus(200);
 
@@ -71,7 +71,7 @@ class UserTest extends TestCase
     {
         $response = $this->post('/api/v2/login', [
             'username' => $this->username,
-            'matrix_username' => $this->matrix_username,
+            'matrix_username' => $this->matrixUsername,
         ]);
 
         $response->assertStatus(200);
@@ -102,18 +102,18 @@ class UserTest extends TestCase
 
     public function test_not_existing_user_with_matrix_username(): void
     {
-        $matrix_username = '@kostia:test.com';
+        $matrixUsername = '@kostia:test.com';
 
-        $json = User::validate_with_matrix_username($matrix_username);
+        $json = User::validate_with_matrix_username($matrixUsername);
 
         $this->assertEquals($json['error'], 'A user with the username does not exist!!!');
     }
 
     public function test_valid_user_with_matrix_username(): void
     {
-        $matrix_username = '@test:test.com';
+        $matrixUsername = '@test:test.com';
 
-        $json = User::validate_with_matrix_username($matrix_username);
+        $json = User::validate_with_matrix_username($matrixUsername);
 
         $this->assertEquals($json['ok'], 'A user with the username is valid.');
     }
