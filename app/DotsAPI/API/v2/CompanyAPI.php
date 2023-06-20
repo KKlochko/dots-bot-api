@@ -16,18 +16,21 @@ class CompanyAPI extends AbstractItemAPI
     }
 
     public function saveMap($companies, $city = null) {
-        foreach ($companies as $company) {
-            $uuid = $company['id'];
-            $name = $company['name'];
-            $image = $company['image'] ?? '';
-            $description = $company['description'] ?? '';
+        foreach ($companies as $company_json) {
+            $uuid = $company_json['id'];
+            $name = $company_json['name'];
+            $image = $company_json['image'] ?? '';
+            $description = $company_json['description'] ?? '';
 
-            Company::firstOrCreate([
+            $company = Company::firstOrCreate([
                 'uuid' => $uuid,
                 'name' => $name,
                 'image' => $image,
                 'description' => $description,
             ]);
+
+            if($city != null)
+                $city->addCompanyId($company->id);
         }
     }
 }
