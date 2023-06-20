@@ -47,7 +47,6 @@ class CategoryController extends Controller
             ]);
 
             $company = $cart->getCompany();
-            $companyUUID = $company->uuid;
         }
 
         if(!$company)
@@ -59,7 +58,7 @@ class CategoryController extends Controller
         $fetcher = new ApiFetcher();
         $categoryItemAPI = new CategoryItemAPI($fetcher);
 
-        $categoriesItemsMap = $categoryItemAPI->getMap($companyUUID);
+        $categoriesItemsMap = $categoryItemAPI->getMap($company->uuid);
         $categoryItemAPI->saveMap($categoriesItemsMap, $company);
 
         // Companies Categories
