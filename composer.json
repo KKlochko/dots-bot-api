@@ -1,9 +1,15 @@
 {
-    "name": "laravel/laravel",
+    "name": "kklochko/dots-bot-api",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "description": "The application to manage logic as bot backend.",
+    "keywords": ["bot", "matrix"],
+    "license": "AGPL-3.0-or-later",
+    "authors": [
+	{
+	    "name": "Kostiantyn Klochko",
+	    "email": "kklochko@protonmail.com"
+        }
+    ],
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.7",
