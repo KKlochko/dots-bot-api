@@ -26,6 +26,11 @@ class City extends Model
         return $this->companies()->pluck('company_id')->toArray();
     }
 
+    public function getCompanies()
+    {
+        return $this->companies;
+    }
+
     public function addCompanyId(int $company_id)
     {
         $this->addCompanyIds([$company_id]);
