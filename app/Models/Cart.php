@@ -28,7 +28,7 @@ class Cart extends Model
 
     public function getCity(): City
     {
-        return City::where('city_id', $this->city_id)->first();
+        return City::where('id', $this->city_id)->first();
     }
 
     public function company(): BelongsTo
@@ -38,7 +38,7 @@ class Cart extends Model
 
     public function getCompany(): Company
     {
-        return Company::where('company_id', $this->company_id)->first();
+        return Company::where('id', $this->company_id)->first();
     }
 
     public function items(): BelongsToMany
