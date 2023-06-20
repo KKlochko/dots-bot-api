@@ -19,10 +19,10 @@ class CategoryItemAPI extends AbstractItemAPI
     }
 
     public function saveMap($categotiesItems, $company = null) {
-        foreach ($categotiesItems as $category) {
-            $uuid = $category['id'];
-            $name = $category['name'];
-            $url = $category['url'];
+        foreach ($categotiesItems as $category_json) {
+            $uuid = $category_json['id'];
+            $name = $category_json['name'];
+            $url = $category_json['url'];
 
             $category = Category::firstOrCreate([
                 'uuid' => $uuid,
@@ -33,7 +33,7 @@ class CategoryItemAPI extends AbstractItemAPI
 
             $item = new ItemAPI($this->fetcher);
 
-            $item->saveMap($category['items']);
+            $item->saveMap($category_json['items'], $category);
         }
     }
 }
