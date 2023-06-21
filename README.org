@@ -10,7 +10,7 @@ It uses [[https://docs.dots.live/][Dots Platform Clients API]].
 - change update the information about the database and the dots api =.env=:
   =postgres= is same name of the service in =docker-compose.yaml=.
   Example:
-  #+BEGIN_SRC toml
+  #+BEGIN_SRC
     DB_CONNECTION=pgsql
     DB_HOST=postgres
     DB_PORT=5432
