@@ -4,6 +4,30 @@ bot backend.
 
 It uses [[https://docs.dots.live/][Dots Platform Clients API]].
 
+* Setup
+- clone this repository.
+- copy =.env.example= and save as =.env=.
+- change update the information about the database and the dots api =.env=:
+  =postgres= is same name of the service in =docker-compose.yaml=.
+  Example:
+  #+BEGIN_SRC toml
+    DB_CONNECTION=pgsql
+    DB_HOST=postgres
+    DB_PORT=5432
+    DB_DATABASE=your_database
+    DB_USERNAME=another_user
+    DB_PASSWORD=secure_password
+
+    DOTS_BASE_URL=https://dotsdomain.test
+    DOTS_API_TOKEN=your_api_token
+    DOTS_API_ACCOUNT_TOKEN=your_api_account_token
+    DOTS_API_AUTH_TOKEN=your_api_auth_token
+  #+END_SRC
+- if you change the database information in =.env=, then it must be changed in =dots-bot-api/docker/postgres/.env=.
+- run =sudo docker-compose up -d= in the project folder.
+- run =sudo docker ps= to see that =dots-bot-api-nginx= bind your host's port with 80.
+- Now you can setup [[https://gitlab.com/KKlochko/dots-matrix-bot][dots-matrix-bot]].
+
 * Author
 Kostiantyn Klochko (c) 2023
 
