@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data
+    env_file:
+      - ./docker/postgres/.env
+
+  dots-bot-api:
+    container_name: dots-bot-api
+    build: .
+    volumes:
+      - ./.env:/code/.env
+    depends_on:
+      - postgres
+    networks:
+      - dots-bot-api
+
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - 80:80
+    depends_on:
+      - dots-bot-api
+    networks:
+      - dots-bot-api
+
+networks:
+  dots-bot-api:
