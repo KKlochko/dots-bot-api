@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 
 class ApiFetcher
 {
-    public function get($endpoint) {
+    public function get($endpoint, $field = 'items') {
         $client = new Client();
 
         $baseUrl = config('dotsapi.base_url');
@@ -31,8 +31,10 @@ class ApiFetcher
         );
 
         $data = json_decode($response->getBody()->getContents(), true);
-        $items = $data['items'];
 
-        return $items;
+        if($field == '')
+            return $data;
+
+        return $data[$field];
     }
 }
