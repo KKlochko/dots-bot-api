@@ -103,6 +103,10 @@ class CartController extends Controller
 
         $orderEndpoint = '/api/v2/orders/' . $orderID;
         $orderData = $authFetcher->get($orderEndpoint, '');
+
+        $cart->status = 'DONE';
+        $cart->save();
+
         return $orderData;
     }
 
