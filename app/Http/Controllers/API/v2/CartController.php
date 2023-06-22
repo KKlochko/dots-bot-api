@@ -16,6 +16,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\v2\UserController;
 use Illuminate\Auth\Events\Validated;
 
+use App\DotsAPI\Fetcher\v2\ApiFetcher;
+use App\DotsAPI\Fetcher\v2\AuthApiFetcher;
+use App\DotsAPI\Fetcher\v2\AuthApiSender;
 use App\Http\Resources\API\v2\CartItemCollection;
 
 class CartController extends Controller
@@ -43,6 +46,64 @@ class CartController extends Controller
         ]);
 
         return new CartItemCollection($cart->items);
+    }
+
+    public function order(Request $request)
+    {
+        $matrixUsername = $request->input('matrixUsername') ?? '';
+        $user = null;
+
+        if(!$matrixUsername)
+            return response()->json([
+                'error' => ''
+            ]);
+
+        $user = User::firstOrCreate([
+            'matrix_username' => $matrixUsername
+        ]);
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user->id,
+            'status' => 'CART'
+        ]);
+
+        $city = $cart->getCity();
+        $company = $cart->getCompany();
+
+        $fetcher = new ApiFetcher();
+        $authSender = new AuthApiSender();
+        $authFetcher = new AuthApiFetcher();
+
+        $companyInfoEndpoint = '/api/v2/companies/' . $company->uuid;
+
+        // get first data for testing
+        $companyData = $fetcher->get($companyInfoEndpoint, '');
+        $address = $companyData['addresses'];
+        $addressUUID = $address[0]['id'];
+
+        $orderEndpoint = '/api/v2/orders';
+        $order = [
+            "orderFields" => [
+                "cityId" => $city->uuid,
+                "companyId" => $company->uuid,
+                "companyAddressId" => $addressUUID,
+                "userName" => $user->username,
+                "userPhone" => $user->phone,
+                "deliveryType" => 2, // no delivery, pickup
+                "paymentType" => 1, // cash
+                "deliveryTime" => 0, // test, as fast as posible
+                "cartItems" => $cart->getItemJSON()
+            ]
+        ];
+
+        $orderID = $authSender->get($orderEndpoint, $order);
+
+        // wait for creating
+        sleep(3);
+
+        $orderEndpoint = '/api/v2/orders/' . $orderID;
+        $orderData = $authFetcher->get($orderEndpoint, '');
+        return $orderData;
     }
 
     public function selectCity(Request $request) {
