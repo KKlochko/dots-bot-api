@@ -56,6 +56,20 @@ class Cart extends Model
         return $item;
     }
 
+    public function getItemJSON()
+    {
+        $items = $this->items;
+        $itemJSON = [];
+
+        foreach($items as $item)
+            array_push($itemJSON, [
+                'id' =>$item->uuid,
+                'count'=> $item->count
+            ]);
+
+        return $itemJSON;
+    }
+
     public function getItemIds(): array
     {
         return $this->items()->pluck('item_id')->toArray();
