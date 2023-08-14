@@ -23,16 +23,16 @@ class User extends Authenticatable
         'phone',
     ];
 
-    public static function validate_with_matrix_username(string $matrix_username)
+    public static function validateWithMatrixUsername(string $matrixUsername)
     {
-        $matrix_username = $matrix_username ?? '';
+        $matrixUsername = $matrixUsername ?? '';
 
-        if($matrix_username == '')
+        if($matrixUsername == '')
             return [
                 'error' => 'The username is empty, please, write username!!!'
             ];
 
-        $user = User::where('matrix_username', $matrix_username)->first();
+        $user = User::where('matrix_username', $matrixUsername)->first();
 
         if(!$user)
             return [

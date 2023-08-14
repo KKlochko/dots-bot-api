@@ -115,7 +115,7 @@ class CartController extends Controller
         $cityName = $request->input('cityName') ?? '';
 
         // check for not valid user
-        $validation = User::validate_with_matrix_username($matrixUsername);
+        $validation = User::validateWithMatrixUsername($matrixUsername);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
@@ -160,7 +160,7 @@ class CartController extends Controller
         $companyName = $request->input('companyName') ?? '';
 
         // check for not valid user
-        $validation = User::validate_with_matrix_username($matrixUsername);
+        $validation = User::validateWithMatrixUsername($matrixUsername);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
@@ -203,7 +203,7 @@ class CartController extends Controller
         $itemCount = $request->input('itemCount') ?? '';
 
         // check for not valid user
-        $validation = User::validate_with_matrix_username($matrixUsername);
+        $validation = User::validateWithMatrixUsername($matrixUsername);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 

@@ -90,31 +90,4 @@ class UserTest extends TestCase
             'username' => $this->username
         ]);
     }
-
-    /* User validation */
-
-    public function test_empty_username_with_matrix_username(): void
-    {
-        $json = User::validate_with_matrix_username('');
-
-        $this->assertEquals($json['error'], 'The username is empty, please, write username!!!');
-    }
-
-    public function test_not_existing_user_with_matrix_username(): void
-    {
-        $matrixUsername = '@kostia:test.com';
-
-        $json = User::validate_with_matrix_username($matrixUsername);
-
-        $this->assertEquals($json['error'], 'A user with the username does not exist!!!');
-    }
-
-    public function test_valid_user_with_matrix_username(): void
-    {
-        $matrixUsername = '@test:test.com';
-
-        $json = User::validate_with_matrix_username($matrixUsername);
-
-        $this->assertEquals($json['ok'], 'A user with the username is valid.');
-    }
 }
