@@ -120,7 +120,7 @@ class CartController extends Controller
             return response()->json($validation);
 
         // check for not valid city
-        $validation = City::validate_with_name($cityName);
+        $validation = City::validateWithName($cityName);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 

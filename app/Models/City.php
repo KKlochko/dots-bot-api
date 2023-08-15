@@ -42,7 +42,7 @@ class City extends Model
         $this->companies()->sync($companyIDs);
     }
 
-    public function removeCompanyID(int $company_id)
+    public function removeCompanyId(int $company_id)
     {
         $this->companies()->detach($company_id);
     }
@@ -52,7 +52,7 @@ class City extends Model
         $this->companies()->detach($company_ids);
     }
 
-    public static function validate_with_name(string $name)
+    public static function validateWithName(string $name)
     {
         $name = $name ?? '';
 
