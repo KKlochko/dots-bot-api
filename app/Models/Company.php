@@ -35,7 +35,7 @@ class Company extends Model
         return $count != 0;
     }
 
-    public static function validate_with_name(string $name)
+    public static function validateWithName(string $name)
     {
         $name = $name ?? '';
 
@@ -44,7 +44,7 @@ class Company extends Model
                 'error' => 'The company name is empty, please, write the name!!!'
             ];
 
-        $company = company::where('name', $name)->first();
+        $company = Company::where('name', $name)->first();
 
         if(!$company)
             return [

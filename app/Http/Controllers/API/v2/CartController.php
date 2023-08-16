@@ -165,7 +165,7 @@ class CartController extends Controller
             return response()->json($validation);
 
         // check for not valid company
-        $validation = Company::validate_with_name($companyName);
+        $validation = Company::validateWithName($companyName);
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
