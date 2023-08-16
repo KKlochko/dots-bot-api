@@ -28,6 +28,13 @@ class Company extends Model
         return $this->hasMany(Category::class);
     }
 
+    public static function isExist(int $company_id): bool
+    {
+        $count = Company::where('id', $company_id)->count();
+
+        return $count != 0;
+    }
+
     public static function validate_with_name(string $name)
     {
         $name = $name ?? '';

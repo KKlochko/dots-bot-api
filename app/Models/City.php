@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use App\Models\Company;
+
 class City extends Model
 {
     use HasFactory;
@@ -33,12 +35,16 @@ class City extends Model
 
     public function addCompanyId(int $company_id)
     {
-        $this->addCompanyIds([$company_id]);
+        if(Company::isExist($company_id))
+            $this->addCompanyIds([$company_id]);
     }
 
     public function addCompanyIds(array $company_ids)
     {
-        $companyIDs = array_merge($this->getCompanyIds(), $company_ids);
+        $existingCompanies = array_filter($company_ids, ['App\Models\Company', 'isExist']);
+
+        $companyIDs = array_merge($this->getCompanyIds(), $existingCompanies);
+
         $this->companies()->sync($companyIDs);
     }
 

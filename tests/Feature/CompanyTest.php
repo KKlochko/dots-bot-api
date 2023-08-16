@@ -10,30 +10,22 @@ use App\Models\Company;
 
 class CompanyTest extends TestCase
 {
-    /* company validation */
-
-    public function test_company_with_empty_name(): void
-    {
-        $json = Company::validate_with_name('');
-
-        $this->assertEquals($json['error'], 'The company name is empty, please, write the name!!!');
-    }
-
-    public function test_not_existing_company_with_name(): void
-    {
-        $name = '404 Company';
-
-        $json = Company::validate_with_name($name);
-
-        $this->assertEquals($json['error'], 'A company with the name does not exist!!!');
-    }
-
-    public function test_valid_company_with_name(): void
+    public function testIsExistForExistingCompany()
     {
         $name = 'testCompany';
+        $id = Company::where('name', $name)->first()->id;
 
-        $json = Company::validate_with_name($name);
+        $isExist = Company::isExist($id);
 
-        $this->assertEquals($json['ok'], 'A company with the name is valid.');
+        $this->assertTrue($isExist);
+    }
+
+    public function testIsExistForNonExistingCompany()
+    {
+        $id = 1234;
+
+        $isExist = Company::isExist($id);
+
+        $this->assertFalse($isExist);
     }
 }

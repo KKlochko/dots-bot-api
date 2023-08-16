@@ -44,7 +44,7 @@ class CityTest extends TestCase
         }
     }
 
-    public function testGetCompaniesIdsForEmpty()
+    public function testGetCompanyIdsForEmptyCity()
     {
         $this->setUpCity();
 
@@ -53,7 +53,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), []);
     }
 
-    public function testAddCompaniesIdForTwoElements()
+    public function testAddTwoCompanyId()
     {
         $this->setUpCity();
         $this->setUpCompanyIds();
@@ -66,7 +66,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
     }
 
-    public function testAddNonExistingCompaniesId()
+    public function testAddNonExistingCompanyId()
     {
         $this->setUpCityWithCompanies();
 
@@ -77,7 +77,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
     }
 
-    public function testAddNonExistingCompaniesIdFromEmpty()
+    public function testAddNonExistingCompanyIdForEmptyCity()
     {
         $this->setUpCity();
         $this->company_ids = [];
@@ -89,7 +89,30 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
     }
 
-    public function testAddNonExistingCompaniesIdsFromEmpty()
+    public function testAddTwoCompanyIds()
+    {
+        $this->setUpCity();
+        $this->setUpCompanyIds();
+
+        $this->city->addCompanyIds($this->company_ids);
+
+        $this->assertNotNull($this->city);
+        $this->assertIsArray($this->city->getCompanyIds());
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+    }
+
+    public function testAddNonExistingCompanyIds()
+    {
+        $this->setUpCityWithCompanies();
+
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+
+        $this->city->addCompanyIds([23423, 1234]);
+
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+    }
+
+    public function testAddNonExistingCompanyIdsForEmpty()
     {
         $this->setUpCity();
         $this->company_ids = [];
@@ -101,7 +124,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
     }
 
-    public function testRemoveCompaniesId()
+    public function testRemoveCompanyId()
     {
         $this->setUpCityWithCompanies();
 
@@ -112,7 +135,30 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), [$this->company_ids[0]]);
     }
 
-    public function testRemoveCompaniesIds()
+    public function testRemoveNonExistingCompanyId()
+    {
+        $this->setUpCityWithCompanies();
+
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+
+        $this->city->removeCompanyId(23423);
+
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+    }
+
+    public function testRemoveNonExistingCompanyIdForEmptyCity()
+    {
+        $this->setUpCity();
+        $this->company_ids = [];
+
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+
+        $this->city->removeCompanyId(23423);
+
+        $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
+    }
+
+    public function testRemoveCompanyIds()
     {
         $this->setUpCityWithCompanies();
 
@@ -123,7 +169,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), [$this->company_ids[0]]);
     }
 
-    public function testRemoveCompaniesIdsForTwoElements()
+    public function testRemoveTwoCompanyIds()
     {
         $this->setUpCityWithCompanies();
 
@@ -134,7 +180,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), []);
     }
 
-    public function testRemoveNonExistingCompaniesIds()
+    public function testRemoveNonExistingCompanyIds()
     {
         $this->setUpCityWithCompanies();
 
@@ -145,7 +191,7 @@ class CityTest extends TestCase
         $this->assertEquals($this->city->getCompanyIds(), $this->company_ids);
     }
 
-    public function testRemoveNonExistingCompaniesIdsFromEmpty()
+    public function testRemoveNonExistingCompanyIdsForEmptyCity()
     {
         $this->setUpCity();
         $this->company_ids = [];
