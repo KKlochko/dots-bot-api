@@ -21,6 +21,7 @@ use App\DotsAPI\Fetcher\v2\AuthApiFetcher;
 use App\DotsAPI\Fetcher\v2\AuthApiSender;
 use App\Http\Resources\API\v2\CartItemCollection;
 
+use App\Models\Validation\CityValidationByName;
 use App\Models\Validation\CompanyValidationByName;
 
 class CartController extends Controller
@@ -121,10 +122,9 @@ class CartController extends Controller
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
-        // check for not valid city
-        $validation = City::validateWithName($cityName);
-        if(array_key_exists('error', $validation))
-            return response()->json($validation);
+        $validator = new CityValidationByName($cityName);
+        if(!$validator->isValid())
+            return response()->json($validator->getMessageMap());
 
         // Get objects
         $user = User::where('matrix_username', $matrixUsername)->first();
@@ -166,7 +166,6 @@ class CartController extends Controller
         if(array_key_exists('error', $validation))
             return response()->json($validation);
 
-        // check for not valid company
         $validator = new CompanyValidationByName($companyName);
         if(!$validator->isValid())
             return response()->json($validator->getMessageMap());

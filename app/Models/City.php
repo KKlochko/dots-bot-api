@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use App\Models\Validation\ValidationByNameInterface;
 use App\Models\Company;
 
-class City extends Model
+class City extends Model implements ValidationByNameInterface
 {
     use HasFactory;
 
@@ -58,24 +59,15 @@ class City extends Model
         $this->companies()->detach($company_ids);
     }
 
-    public static function validateWithName(string $name)
+    public static function isExistByName(string $name): bool
     {
-        $name = $name ?? '';
+        $count = City::where('name', $name)->count();
 
-        if($name == '')
-            return [
-                'error' => 'The city name is empty, please, write the name!!!'
-            ];
+        return $count != 0;
+    }
 
-        $city = City::where('name', $name)->first();
-
-        if(!$city)
-            return [
-                'error' => 'A city with the name does not exist!!!'
-            ];
-
-        return [
-            'ok' => 'A city with the name is valid.'
-        ];
+    public static function isNameValid(string $name): bool
+    {
+        return $name != '';
     }
 }
