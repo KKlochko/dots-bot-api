@@ -2,38 +2,44 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-use Illuminate\Http\Request;
-
-use App\Models\User;
+use App\Models\Validation\UserValidationByMatrixUsername;
 
 class UserValidationTest extends TestCase
 {
-    public function testEmptyUsernameWithMatrixUsername(): void
-    {
-        $json = User::validateWithMatrixUsername('');
-
-        $this->assertEquals($json['error'], 'The username is empty, please, write username!!!');
+    public function dataProvider() {
+        return [
+            'Invalid Case' => [
+                'name' => '',
+                'key' => 'error',
+                'message' =>  'The username is empty, please, write username!!!',
+                'isValid' =>  false,
+            ],
+            'Not Found Case' => [
+                'name' => '@kostia:test.com',
+                'key' => 'error',
+                'message' =>  'A user with the username does not exist!!!',
+                'isValid' =>  false,
+            ],
+            'Found Case' => [
+                'name' => '@test:test.com',
+                'key' => 'ok',
+                'message' =>  'A user with the username is valid.',
+                'isValid' =>  true,
+            ]
+        ];
     }
 
-    public function testValidUserWithMatrixUsername(): void
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testCityValidationWithName(string $name, string $key, string $message, bool $isValid): void
     {
-        $matrixUsername = '@test:test.com';
+        $validator = new UserValidationByMatrixUsername($name);
+        $json = $validator->getMessageMap();
 
-        $json = User::validateWithMatrixUsername($matrixUsername);
-
-        $this->assertEquals($json['ok'], 'A user with the username is valid.');
-    }
-
-    public function testNotExistingUserWithMatrixUsername(): void
-    {
-        $matrixUsername = '@kostia:test.com';
-
-        $json = User::validateWithMatrixUsername($matrixUsername);
-
-        $this->assertEquals($json['error'], 'A user with the username does not exist!!!');
+        $this->assertEquals($json[$key], $message);
+        $this->assertEquals($validator->isValid(), $isValid);
     }
 }

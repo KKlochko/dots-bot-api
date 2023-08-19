@@ -21,6 +21,7 @@ use App\DotsAPI\Fetcher\v2\AuthApiFetcher;
 use App\DotsAPI\Fetcher\v2\AuthApiSender;
 use App\Http\Resources\API\v2\CartItemCollection;
 
+use App\Models\Validation\UserValidationByMatrixUsername;
 use App\Models\Validation\CityValidationByName;
 use App\Models\Validation\CompanyValidationByName;
 
@@ -117,10 +118,9 @@ class CartController extends Controller
         $matrixUsername = $request->input('matrixUsername') ?? '';
         $cityName = $request->input('cityName') ?? '';
 
-        // check for not valid user
-        $validation = User::validateWithMatrixUsername($matrixUsername);
-        if(array_key_exists('error', $validation))
-            return response()->json($validation);
+        $validator = new UserValidationByMatrixUsername($matrixUsername);
+        if(!$validator->isValid())
+            return response()->json($validator->getMessageMap());
 
         $validator = new CityValidationByName($cityName);
         if(!$validator->isValid())
@@ -161,10 +161,9 @@ class CartController extends Controller
         $matrixUsername = $request->input('matrixUsername') ?? '';
         $companyName = $request->input('companyName') ?? '';
 
-        // check for not valid user
-        $validation = User::validateWithMatrixUsername($matrixUsername);
-        if(array_key_exists('error', $validation))
-            return response()->json($validation);
+        $validator = new UserValidationByMatrixUsername($matrixUsername);
+        if(!$validator->isValid())
+            return response()->json($validator->getMessageMap());
 
         $validator = new CompanyValidationByName($companyName);
         if(!$validator->isValid())
@@ -203,10 +202,9 @@ class CartController extends Controller
         $itemName = $request->input('itemName') ?? '';
         $itemCount = $request->input('itemCount') ?? '';
 
-        // check for not valid user
-        $validation = User::validateWithMatrixUsername($matrixUsername);
-        if(array_key_exists('error', $validation))
-            return response()->json($validation);
+        $validator = new UserValidationByMatrixUsername($matrixUsername);
+        if(!$validator->isValid())
+            return response()->json($validator->getMessageMap());
 
         // check for not valid item
         $validation = Item::validate_with_name($itemName);

@@ -8,7 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+use App\Models\Validation\ValidationByNameInterface;
+
+class User extends Authenticatable implements ValidationByNameInterface
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -23,24 +25,18 @@ class User extends Authenticatable
         'phone',
     ];
 
-    public static function validateWithMatrixUsername(string $matrixUsername)
+
+
+
+    public static function isExistByName(string $name): bool
     {
-        $matrixUsername = $matrixUsername ?? '';
+        $count = User::where('matrix_username', $name)->count();
 
-        if($matrixUsername == '')
-            return [
-                'error' => 'The username is empty, please, write username!!!'
-            ];
+        return $count != 0;
+    }
 
-        $user = User::where('matrix_username', $matrixUsername)->first();
-
-        if(!$user)
-            return [
-                'error' => 'A user with the username does not exist!!!'
-            ];
-
-        return [
-            'ok' => 'A user with the username is valid.'
-        ];
+    public static function isNameValid(string $name): bool
+    {
+        return $name != '';
     }
 }
