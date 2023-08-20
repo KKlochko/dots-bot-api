@@ -24,6 +24,7 @@ use App\Http\Resources\API\v2\CartItemCollection;
 use App\Models\Validation\UserValidationByMatrixUsername;
 use App\Models\Validation\CityValidationByName;
 use App\Models\Validation\CompanyValidationByName;
+use App\Models\Validation\ItemValidationByName;
 
 class CartController extends Controller
 {
@@ -206,10 +207,9 @@ class CartController extends Controller
         if(!$validator->isValid())
             return response()->json($validator->getMessageMap());
 
-        // check for not valid item
-        $validation = Item::validate_with_name($itemName);
-        if(array_key_exists('error', $validation))
-            return response()->json($validation);
+        $validator = new ItemValidationByName($itemName);
+        if(!$validator->isValid())
+            return response()->json($validator->getMessageMap());
 
         if($itemCount == 0)
             return response()->json([
