@@ -34,7 +34,7 @@ class ItemValidationByNameTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testCityValidationWithName(string $name, string $key, string $message, bool $isValid): void
+    public function testItemValidationWithName(string $name, string $key, string $message, bool $isValid): void
     {
         $validator = new ItemValidationByName($name);
         $json = $validator->getMessageMap();

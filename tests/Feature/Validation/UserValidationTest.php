@@ -34,7 +34,7 @@ class UserValidationTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testCityValidationWithName(string $name, string $key, string $message, bool $isValid): void
+    public function testUserValidationWithName(string $name, string $key, string $message, bool $isValid): void
     {
         $validator = new UserValidationByMatrixUsername($name);
         $json = $validator->getMessageMap();

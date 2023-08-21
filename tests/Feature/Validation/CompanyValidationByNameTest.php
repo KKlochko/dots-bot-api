@@ -8,39 +8,38 @@ use App\Models\Validation\CompanyValidationByName;
 
 class CompanyValidationByNameTest extends TestCase
 {
-    public function testCompanyWithEmptyName(): void
-    {
-        $name = '';
-
-        $validator = new CompanyValidationByName($name);
-        $json = $validator->getMessageMap();
-        $isValid = $validator->isValid();
-
-        $this->assertEquals($json['error'], 'The company name is empty, please, write the name!!!');
-        $this->assertFalse($isValid);
+    public function dataProvider() {
+        return [
+            'Invalid Case' => [
+                'name' => '',
+                'key' => 'error',
+                'message' => 'The company name is empty, please, write the name!!!',
+                'isValid' => false,
+            ],
+            'Not Found Case' => [
+                'name' => '404 Company',
+                'key' => 'error',
+                'message' => 'A company with the name does not exist!!!',
+                'isValid' => false,
+            ],
+            'Found Case' => [
+                'name' => 'testCompany',
+                'key' => 'ok',
+                'message' => 'A company with the name is valid.',
+                'isValid' => true,
+            ]
+        ];
     }
 
-    public function testNotExistingCompanyWithName(): void
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testCompanyValidationWithName(string $name, string $key, string $message, bool $isValid): void
     {
-        $name = '404 Company';
-
         $validator = new CompanyValidationByName($name);
         $json = $validator->getMessageMap();
-        $isValid = $validator->isValid();
 
-        $this->assertEquals($json['error'], 'A company with the name does not exist!!!');
-        $this->assertFalse($isValid);
-    }
-
-    public function testValidCompanyWithName(): void
-    {
-        $name = 'testCompany';
-
-        $validator = new CompanyValidationByName($name);
-        $json = $validator->getMessageMap();
-        $isValid = $validator->isValid();
-
-        $this->assertEquals($json['ok'], 'A company with the name is valid.');
-        $this->assertTrue($isValid);
+        $this->assertEquals($json[$key], $message);
+        $this->assertEquals($validator->isValid(), $isValid);
     }
 }
