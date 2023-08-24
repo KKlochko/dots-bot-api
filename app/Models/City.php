@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Models\Validation\ValidationByNameInterface;
 use App\Models\Company;
@@ -22,6 +23,11 @@ class City extends Model implements ValidationByNameInterface
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'cities_companies', 'city_id', 'company_id');
+    }
+
+    public function userAddresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class);
     }
 
     public function getCompanyIds(): array
