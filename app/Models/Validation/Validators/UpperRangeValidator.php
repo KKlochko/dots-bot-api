@@ -2,15 +2,14 @@
 
 namespace App\Models\Validation\Validators;
 
-use App\Models\Validation\Validators\ValidationInterface;
-use App\Models\Validation\Validators\ValidationTrait;
+use App\Models\Validation\Validators\Validator;
 
-class UpperRangeValidator implements ValidationInterface {
-    private ValidationInterface $nextValidator;
+class UpperRangeValidator extends Validator {
     private int $value;
     private int $rangeLimit;
+    protected Validator $nextValidator;
 
-    public function __construct(int $value, int $rangeLimit, ValidationInterface $nextValidator)
+    public function __construct(int $value, int $rangeLimit, Validator $nextValidator)
     {
         $this->value = $value;
         $this->rangeLimit = $rangeLimit;
@@ -23,11 +22,6 @@ class UpperRangeValidator implements ValidationInterface {
             return false;
 
         return true;
-    }
-
-    public function isValid(): bool
-    {
-        return $this->isCurrentValid() && $this->nextValidator->isValid();
     }
 }
 
