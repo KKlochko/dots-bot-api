@@ -3,16 +3,15 @@
 namespace App\Models\Validation\Messages;
 
 use App\Models\Validation\Messages\InformativeValidator;
-use App\Models\Validation\Validators\UpperRangeValidator;
+use App\Models\Validation\Validators\Validator;
 
-class UpperRangeInformativeValidator extends InformativeValidator {
+class NextInformativeValidator extends InformativeValidator {
     protected InformativeValidator $nextValidator;
 
-    public function __construct(string $message, UpperRangeValidator $validator, InformativeValidator $nextValidator)
+    public function __construct(string $message, Validator $validator, InformativeValidator $nextValidator)
     {
         $this->setMessage($message);
         $this->setValidator($validator);
         $this->nextValidator = $nextValidator;
     }
 }
-

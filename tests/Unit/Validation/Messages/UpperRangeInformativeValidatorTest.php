@@ -4,10 +4,11 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-use App\Models\Validation\Messages\UpperRangeInformativeValidator;
+use App\Models\Validation\Messages\NextInformativeValidator;
 use App\Models\Validation\Messages\OkInformativeValidator;
 use App\Models\Validation\Validators\UpperRangeValidator;
 use App\Models\Validation\Validators\OkValidator;
+use App\Models\Validation\Validators\Validator;
 
 class UpperRangeInformativeValidatorTest extends TestCase
 {
@@ -45,11 +46,11 @@ class UpperRangeInformativeValidatorTest extends TestCase
         ];
     }
 
-    public function setUpValidator(int $value, int $rangeLimit): UpperRangeInformativeValidator
+    public function setUpValidator(int $value, int $rangeLimit): NextInformativeValidator
     {
         $upperRangeValidator = new UpperRangeValidator($value, $rangeLimit, new OkValidator());
 
-        return new UpperRangeInformativeValidator(
+        return new NextInformativeValidator(
             $this->messages['error'],
             $upperRangeValidator,
             new OkInformativeValidator($this->messages['ok']),
