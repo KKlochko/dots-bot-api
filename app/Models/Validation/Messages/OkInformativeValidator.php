@@ -17,7 +17,7 @@ class OkInformativeValidator extends InformativeValidator {
         return $this->message;
     }
 
-    public function okStatus(): array
+    public function getOkStatus(): array
     {
         return ['ok' => $this->getMessage()];
     }

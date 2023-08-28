@@ -36,12 +36,12 @@ abstract class InformativeValidator extends Validator {
         return $this->nextValidator->getMessage();
     }
 
-    public function okStatus(): array
+    public function getOkStatus(): array
     {
         if(!$this->isCurrentValid())
             return ['error' => $this->message];
 
-        return $this->nextValidator->okStatus();
+        return $this->nextValidator->getOkStatus();
     }
 }
 

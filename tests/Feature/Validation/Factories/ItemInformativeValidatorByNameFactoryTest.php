@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 use App\Models\Validation\Messages\Factories\ItemInformativeValidatorByNameFactory;
 
-class ItemValidatorByNameFactoryTest extends TestCase
+class ItemInformativeValidatorByNameFactoryTest extends TestCase
 {
     public function dataProvider() {
         return [
@@ -40,7 +40,7 @@ class ItemValidatorByNameFactoryTest extends TestCase
         $validator = $factory->create();
 
         $this->assertEquals($validator->getMessage(), $message);
-        $this->assertEquals($validator->okStatus(), [$key => $message]);
+        $this->assertEquals($validator->getOkStatus(), [$key => $message]);
         $this->assertEquals($validator->isValid(), $isValid);
     }
 }
