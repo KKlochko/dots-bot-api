@@ -23,7 +23,7 @@ use App\Http\Resources\API\v2\CartItemCollection;
 
 use App\Models\Validation\UserValidationByMatrixUsername;
 use App\Models\Validation\CityValidationByName;
-use App\Models\Validation\CompanyValidationByName;
+use App\Models\Validation\Messages\Factories\CompanyInformativeValidatorByNameFactory;
 use App\Models\Validation\Messages\Factories\ItemInformativeValidatorByNameFactory;
 
 class CartController extends Controller
@@ -166,9 +166,9 @@ class CartController extends Controller
         if(!$validator->isValid())
             return response()->json($validator->getMessageMap());
 
-        $validator = new CompanyValidationByName($companyName);
+        $validator = (new CompanyInformativeValidatorByNameFactory($companyName))->create();
         if(!$validator->isValid())
-            return response()->json($validator->getMessageMap());
+            return response()->json($validator->getOkStatus());
 
         // Get objects
         $user = User::where('matrix_username', $matrixUsername)->first();
