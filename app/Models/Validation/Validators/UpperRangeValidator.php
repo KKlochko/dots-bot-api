@@ -2,9 +2,9 @@
 
 namespace App\Models\Validation\Validators;
 
-use App\Models\Validation\Validators\Validator;
+use App\Models\Validation\Validators\NextValidator;
 
-class UpperRangeValidator extends Validator {
+class UpperRangeValidator extends NextValidator {
     private int $value;
     private int $rangeLimit;
     protected Validator $nextValidator;

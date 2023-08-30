@@ -2,9 +2,9 @@
 
 namespace App\Models\Validation\Validators;
 
-use App\Models\Validation\Validators\Validator;
+use App\Models\Validation\Validators\NextValidator;
 
-class EmptyNameValidator extends Validator {
+class EmptyNameValidator extends NextValidator {
     private string $name;
     protected Validator $nextValidator;
 

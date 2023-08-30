@@ -2,22 +2,13 @@
 
 namespace App\Models\Validation\Validators;
 
-use App\Models\Validation\Validators\Validator;
+use App\Models\Validation\Validators\NextValidatorByName;
 use App\Models\Item;
 
-class ItemValidatorByName extends Validator {
-    private string $name;
-    protected Validator $nextValidator;
-
-    public function __construct(string $name, Validator $nextValidator)
-    {
-        $this->name = $name;
-        $this->nextValidator = $nextValidator;
-    }
-
+class ItemValidatorByName extends NextValidatorByName {
     public function isCurrentValid(): bool
     {
-        $count = Item::where('name', $this->name)->count();
+        $count = Item::where('name', $this->getName())->count();
 
         return $count != 0;
     }

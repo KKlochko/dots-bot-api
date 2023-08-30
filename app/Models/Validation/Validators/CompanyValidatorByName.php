@@ -2,22 +2,13 @@
 
 namespace App\Models\Validation\Validators;
 
-use App\Models\Validation\Validators\Validator;
+use App\Models\Validation\Validators\NextValidatorByName;
 use App\Models\Company;
 
-class CompanyValidatorByName extends Validator {
-    private string $name;
-    protected Validator $nextValidator;
-
-    public function __construct(string $name, Validator $nextValidator)
-    {
-        $this->name = $name;
-        $this->nextValidator = $nextValidator;
-    }
-
+class CompanyValidatorByName extends NextValidatorByName {
     public function isCurrentValid(): bool
     {
-        $count = Company::where('name', $this->name)->count();
+        $count = Company::where('name', $this->getName())->count();
 
         return $count != 0;
     }
