@@ -3,6 +3,7 @@
 namespace App\Models\Validation\Messages\Factories;
 
 use App\Models\Validation\Messages\Factories\InformativeValidatorByNameFactory;
+use App\Models\Validation\Messages\Factories\MessageByNameFactory;
 use App\Models\Validation\Messages\InformativeValidator;
 
 use App\Models\Validation\Validators\Validator;
@@ -12,11 +13,7 @@ class CompanyInformativeValidatorByNameFactory extends InformativeValidatorByNam
 {
     public function __construct(string $name)
     {
-        $this->setMessages([
-            'found' => 'A company with the name is valid.',
-            'not_found' => 'A company with the name does not exist!!!',
-            'invalid_name' => 'The company name is empty, please, write the name!!!',
-        ]);
+        $this->setMessages((new MessageByNameFactory('company'))->create());
 
         $this->setName($name);
     }
