@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-use App\Models\Validation\Messages\NextInformativeValidator;
-use App\Models\Validation\Messages\OkInformativeValidator;
+use App\Models\Validation\Validators\Informative\NextInformativeValidator;
+use App\Models\Validation\Validators\Informative\OkInformativeValidator;
 use App\Models\Validation\Validators\UpperRangeValidator;
 use App\Models\Validation\Validators\OkValidator;
 use App\Models\Validation\Validators\Validator;

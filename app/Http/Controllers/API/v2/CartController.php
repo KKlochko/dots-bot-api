@@ -23,8 +23,8 @@ use App\Http\Resources\API\v2\CartItemCollection;
 
 use App\Models\Validation\UserValidationByMatrixUsername;
 use App\Models\Validation\CityValidationByName;
-use App\Models\Validation\Messages\Factories\CompanyInformativeValidatorByNameFactory;
-use App\Models\Validation\Messages\Factories\ItemInformativeValidatorByNameFactory;
+use App\Models\Validation\Validators\Informative\Factories\CompanyInformativeValidatorByNameFactory;
+use App\Models\Validation\Validators\Informative\Factories\ItemInformativeValidatorByNameFactory;
 
 class CartController extends Controller
 {

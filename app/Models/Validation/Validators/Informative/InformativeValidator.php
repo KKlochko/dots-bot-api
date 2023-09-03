@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Validation\Messages;
+namespace App\Models\Validation\Validators\Informative;
 
 use App\Models\Validation\Validators\Validator;
 

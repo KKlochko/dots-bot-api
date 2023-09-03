@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Validation\Messages\Factories;
+namespace App\Models\Validation\Validators\Informative\Factories;
 
-use App\Models\Validation\Messages\Factories\InformativeValidatorFactory;
-use App\Models\Validation\Messages\InformativeValidator;
+use App\Models\Validation\Validators\Informative\Factories\InformativeValidatorFactory;
+use App\Models\Validation\Validators\Informative\InformativeValidator;
 
-use App\Models\Validation\Messages\OkInformativeValidator;
-use App\Models\Validation\Messages\NextInformativeValidator;
+use App\Models\Validation\Validators\Informative\OkInformativeValidator;
+use App\Models\Validation\Validators\Informative\NextInformativeValidator;
 use App\Models\Validation\Validators\EmptyNameValidator;
 use App\Models\Validation\Validators\Validator;
 

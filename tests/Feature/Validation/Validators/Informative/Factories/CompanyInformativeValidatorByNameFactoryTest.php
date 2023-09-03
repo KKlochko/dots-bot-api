@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 
-use App\Models\Validation\Messages\Factories\CompanyInformativeValidatorByNameFactory;
+use App\Models\Validation\Validators\Informative\Factories\CompanyInformativeValidatorByNameFactory;
 
 class CompanyInformativeValidatorByNameFactoryTest extends TestCase
 {
