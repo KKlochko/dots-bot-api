@@ -22,7 +22,7 @@ use App\DotsAPI\Fetcher\v2\AuthApiSender;
 use App\Http\Resources\API\v2\CartItemCollection;
 
 use App\Models\Validation\UserValidationByMatrixUsername;
-use App\Models\Validation\CityValidationByName;
+use App\Models\Validation\Validators\Informative\Factories\CityInformativeValidatorByNameFactory;
 use App\Models\Validation\Validators\Informative\Factories\CompanyInformativeValidatorByNameFactory;
 use App\Models\Validation\Validators\Informative\Factories\ItemInformativeValidatorByNameFactory;
 
@@ -123,9 +123,9 @@ class CartController extends Controller
         if(!$validator->isValid())
             return response()->json($validator->getMessageMap());
 
-        $validator = new CityValidationByName($cityName);
+        $validator = (new CityInformativeValidatorByNameFactory($cityName))->create();
         if(!$validator->isValid())
-            return response()->json($validator->getMessageMap());
+            return response()->json($validator->getOkStatus());
 
         // Get objects
         $user = User::where('matrix_username', $matrixUsername)->first();
