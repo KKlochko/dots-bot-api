@@ -21,7 +21,7 @@ use App\DotsAPI\Fetcher\v2\AuthApiFetcher;
 use App\DotsAPI\Fetcher\v2\AuthApiSender;
 use App\Http\Resources\API\v2\CartItemCollection;
 
-use App\Models\Validation\UserValidationByMatrixUsername;
+use App\Models\Validation\Validators\Informative\Factories\UserInformativeValidatorByMatrixUserNameFactory;
 use App\Models\Validation\Validators\Informative\Factories\CityInformativeValidatorByNameFactory;
 use App\Models\Validation\Validators\Informative\Factories\CompanyInformativeValidatorByNameFactory;
 use App\Models\Validation\Validators\Informative\Factories\ItemInformativeValidatorByNameFactory;
@@ -119,13 +119,15 @@ class CartController extends Controller
         $matrixUsername = $request->input('matrixUsername') ?? '';
         $cityName = $request->input('cityName') ?? '';
 
-        $validator = new UserValidationByMatrixUsername($matrixUsername);
-        if(!$validator->isValid())
-            return response()->json($validator->getMessageMap());
+        $validators = [
+            (new UserInformativeValidatorByMatrixUserNameFactory($matrixUsername))->create(),
+            (new CityInformativeValidatorByNameFactory($cityName))->create()
+        ];
 
-        $validator = (new CityInformativeValidatorByNameFactory($cityName))->create();
-        if(!$validator->isValid())
-            return response()->json($validator->getOkStatus());
+        foreach($validators as $validator) {
+            if(!$validator->isValid())
+                return response()->json($validator->getOkStatus());
+        }
 
         // Get objects
         $user = User::where('matrix_username', $matrixUsername)->first();
@@ -162,13 +164,15 @@ class CartController extends Controller
         $matrixUsername = $request->input('matrixUsername') ?? '';
         $companyName = $request->input('companyName') ?? '';
 
-        $validator = new UserValidationByMatrixUsername($matrixUsername);
-        if(!$validator->isValid())
-            return response()->json($validator->getMessageMap());
+        $validators = [
+            (new UserInformativeValidatorByMatrixUserNameFactory($matrixUsername))->create(),
+            (new CompanyInformativeValidatorByNameFactory($companyName))->create()
+        ];
 
-        $validator = (new CompanyInformativeValidatorByNameFactory($companyName))->create();
-        if(!$validator->isValid())
-            return response()->json($validator->getOkStatus());
+        foreach($validators as $validator) {
+            if(!$validator->isValid())
+                return response()->json($validator->getOkStatus());
+        }
 
         // Get objects
         $user = User::where('matrix_username', $matrixUsername)->first();
@@ -203,13 +207,15 @@ class CartController extends Controller
         $itemName = $request->input('itemName') ?? '';
         $itemCount = $request->input('itemCount') ?? '';
 
-        $validator = new UserValidationByMatrixUsername($matrixUsername);
-        if(!$validator->isValid())
-            return response()->json($validator->getMessageMap());
+        $validators = [
+            (new UserInformativeValidatorByMatrixUserNameFactory($matrixUsername))->create(),
+            (new ItemInformativeValidatorByNameFactory($itemName))->create()
+        ];
 
-        $validator = (new ItemInformativeValidatorByNameFactory($itemName))->create();
-        if(!$validator->isValid())
-            return response()->json($validator->getOkStatus());
+        foreach($validators as $validator) {
+            if(!$validator->isValid())
+                return response()->json($validator->getOkStatus());
+        }
 
         if($itemCount == 0)
             return response()->json([

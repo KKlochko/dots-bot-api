@@ -303,7 +303,7 @@ class CartTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson([
-            'error' => 'The username is empty, please, write username!!!'
+            'error' => 'The username is invalid, please, check that you are registered or signed in!!!'
         ]);
     }
 
@@ -321,7 +321,7 @@ class CartTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson([
-            'error' => 'The username is empty, please, write username!!!'
+            'error' => 'The username is invalid, please, check that you are registered or signed in!!!'
         ]);
     }
 }

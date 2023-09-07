@@ -9,9 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\Validation\ValidationByNameInterface;
-
-class User extends Authenticatable implements ValidationByNameInterface
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -28,18 +26,6 @@ class User extends Authenticatable implements ValidationByNameInterface
 
 
 
-
-    public static function isExistByName(string $name): bool
-    {
-        $count = User::where('matrix_username', $name)->count();
-
-        return $count != 0;
-    }
-
-    public static function isNameValid(string $name): bool
-    {
-        return $name != '';
-    }
 
     public function userAddresses(): HasMany
     {
