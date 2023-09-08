@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-use App\Models\Validation\ValidationByNameInterface;
-
-class Company extends Model implements ValidationByNameInterface
+class Company extends Model
 {
     use HasFactory;
 
@@ -35,17 +33,5 @@ class Company extends Model implements ValidationByNameInterface
         $count = Company::where('id', $id)->count();
 
         return $count != 0;
-    }
-
-    public static function isExistByName(string $name): bool
-    {
-        $count = Company::where('name', $name)->count();
-
-        return $count != 0;
-    }
-
-    public static function isNameValid(string $name): bool
-    {
-        return $name != '';
     }
 }

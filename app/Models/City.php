@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\Validation\ValidationByNameInterface;
 use App\Models\Company;
 
-class City extends Model implements ValidationByNameInterface
+class City extends Model
 {
     use HasFactory;
 
@@ -63,17 +62,5 @@ class City extends Model implements ValidationByNameInterface
     public function removeCompanyIds(array $company_ids)
     {
         $this->companies()->detach($company_ids);
-    }
-
-    public static function isExistByName(string $name): bool
-    {
-        $count = City::where('name', $name)->count();
-
-        return $count != 0;
-    }
-
-    public static function isNameValid(string $name): bool
-    {
-        return $name != '';
     }
 }
